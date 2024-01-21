@@ -3,7 +3,7 @@ import 'App.css';
 
 function App() {
   return (
-    <Grid rows={6} columns={4} style={{ width: '98rem', height: '147rem' }}>
+    <Grid rows={6} columns={4} style={{ width: '96rem', height: '144rem' }}>
       <Tile>
         <div
           style={{
