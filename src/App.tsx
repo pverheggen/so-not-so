@@ -1,19 +1,10 @@
-import { FigureRow } from 'components';
+import { Play } from 'components';
 import 'App.css';
 
 function App() {
   return (
     <div className="app">
-      <FigureRow selectable />
-      <FigureRow />
-      <FigureRow />
-      <FigureRow />
-      <FigureRow />
-      <FigureRow />
-      <FigureRow />
-      <FigureRow />
-      <FigureRow />
-      <FigureRow />
+      <Play />
     </div>
   );
 }

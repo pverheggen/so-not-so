@@ -1,17 +1,8 @@
 import { Figure, Symbol } from 'components';
 import classes from './GridFigure.module.css';
-import { useMemo } from 'react';
 import { IGridFigureProps } from './types';
 
-const GridFigure = ({ selectable }: IGridFigureProps): JSX.Element => {
-  // For now, use randomly generated symbols
-  const symbols = useMemo(
-    () =>
-      Array(16)
-        .fill(false)
-        .map(() => Math.random() > 0.8),
-    [],
-  );
+const GridFigure = ({ onClick, selectable, symbols }: IGridFigureProps): JSX.Element => {
   const createSymbol = (symbol: boolean, isymbol: number) => {
     if (!symbol) return null;
     const columnCount = 4;
@@ -24,7 +15,7 @@ const GridFigure = ({ selectable }: IGridFigureProps): JSX.Element => {
       />
     );
   };
-  return <Figure selectable={selectable} s={{ className: classes.grid }}>{symbols.map(createSymbol)}</Figure>;
+  return <Figure onClick={onClick} selectable={selectable} s={{ className: classes.grid }}>{symbols?.map(createSymbol)}</Figure>;
 };
 
 export { GridFigure };

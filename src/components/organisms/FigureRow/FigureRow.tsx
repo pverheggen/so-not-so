@@ -2,13 +2,13 @@ import { GridFigure } from 'components';
 import classes from './FigureRow.module.css';
 import { IFigureRowProps } from './types';
 
-const FigureRow = ({ selectable }: IFigureRowProps): JSX.Element => {
+const FigureRow = ({ onClick, selectable, figures }: IFigureRowProps): JSX.Element => {
   return (
     <div className={classes.row}>
-      <GridFigure selectable={selectable} />
-      <GridFigure selectable={selectable} />
-      <GridFigure selectable={selectable} />
-      <GridFigure selectable={selectable} />
+      {
+        figures?.map((symbols, ifigure) =>
+          <GridFigure key={ifigure} onClick={() => { onClick?.(ifigure); }} symbols={symbols} selectable={selectable} />)
+      }
     </div>
   );
 };
