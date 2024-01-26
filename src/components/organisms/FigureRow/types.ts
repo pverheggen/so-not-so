@@ -1,3 +1,4 @@
 export interface IFigureRowProps {
-  figures: boolean[][];
+  figures?: boolean[][];
+  selectable?: boolean;
 }

@@ -4,7 +4,7 @@ import 'App.css';
 function App() {
   return (
     <div className="app">
-      <FigureRow />
+      <FigureRow selectable />
       <FigureRow />
       <FigureRow />
       <FigureRow />

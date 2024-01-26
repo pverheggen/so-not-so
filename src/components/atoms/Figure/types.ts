@@ -1,6 +1,7 @@
-import { IStyleProps } from "utils/styles/types";
+import { IStyleProps } from 'utils/styles/types';
 
 export interface IFigureProps {
   children?: React.ReactNode;
   s?: IStyleProps;
+  selectable?: boolean;
 }

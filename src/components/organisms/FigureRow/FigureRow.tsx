@@ -1,13 +1,14 @@
 import { GridFigure } from 'components';
 import classes from './FigureRow.module.css';
+import { IFigureRowProps } from './types';
 
-const FigureRow = (): JSX.Element => {
+const FigureRow = ({ selectable }: IFigureRowProps): JSX.Element => {
   return (
     <div className={classes.row}>
-      <GridFigure />
-      <GridFigure />
-      <GridFigure />
-      <GridFigure />
+      <GridFigure selectable={selectable} />
+      <GridFigure selectable={selectable} />
+      <GridFigure selectable={selectable} />
+      <GridFigure selectable={selectable} />
     </div>
   );
 };

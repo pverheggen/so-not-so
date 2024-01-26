@@ -1,3 +1,4 @@
 export interface IGridFigureProps {
-  symbols: boolean[];
+  symbols?: boolean[];
+  selectable?: boolean;
 }
