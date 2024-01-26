@@ -1,28 +1,31 @@
 import { FigureRow } from "components";
 import { useState } from "react";
+import { FigureRowData, GridFigureTraits } from 'types';
 
-const createFigureSymbols = () =>
+const createFigureSymbols = (): GridFigureTraits =>
     Array(16)
         .fill(undefined)
-        .map(() => Math.random() > 0.8);
+        .map(() => Math.random() > 0.8 ? { color: 'light', shape: 'square' } : undefined);
 
-const createFigureRow = () =>
-    Array(4)
+const createFigureRow = (key: number): FigureRowData => ({
+    key,
+    figures: Array(4)
         .fill(undefined)
-        .map(createFigureSymbols);
+        .map(createFigureSymbols)
+});
 
 const Play = (): JSX.Element => {
-    const [currentRow, setCurrentRow] = useState(createFigureRow);
-    const [pastRows, setPastRows] = useState<boolean[][][]>([]);
+    const [currentRow, setCurrentRow] = useState(() => createFigureRow(0));
+    const [pastRows, setPastRows] = useState<FigureRowData[]>([]);
     const onClick = () => {
+        setCurrentRow(createFigureRow(pastRows.length + 1));
         setPastRows([currentRow, ...pastRows]);
-        setCurrentRow(createFigureRow());
     };
     return (
         <>
-            <FigureRow selectable figures={currentRow} onClick={onClick} />
+            <FigureRow selectable figures={currentRow.figures} onClick={onClick} />
             {
-                pastRows.map((row, irow) => <FigureRow key={irow} figures={row} />)
+                pastRows.map(({ key, figures }) => <FigureRow key={key} figures={figures} />)
             }
         </>
     );

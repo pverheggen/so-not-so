@@ -1,5 +1,7 @@
+import { GridFigureTraits } from 'types';
+
 export interface IFigureRowProps {
-  figures?: boolean[][];
+  figures?: GridFigureTraits[];
   onClick?: (figureIndex: number) => void;
   selectable?: boolean;
 }
