@@ -1,0 +1,6 @@
+.figure {
+  height: 22.5rem;
+  width: 22.5rem;
+  border: 2px solid #444;
+  box-sizing: border-box;
+}

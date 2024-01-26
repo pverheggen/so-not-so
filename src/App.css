@@ -11,3 +11,7 @@ body {
   margin: auto;
   background-color: #040404;
 }
+
+.app {
+  width: 100rem;
+}
