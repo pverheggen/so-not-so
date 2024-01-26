@@ -1,4 +1,5 @@
+import { IStyleProps } from "utils";
+
 export interface ISymbolProps {
-  className?: string;
-  style?: React.CSSProperties;
+  s?: IStyleProps;
 }

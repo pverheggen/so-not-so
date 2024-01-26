@@ -1,1 +1,1 @@
-export * from './toStyleVars';
+export * from './styles';

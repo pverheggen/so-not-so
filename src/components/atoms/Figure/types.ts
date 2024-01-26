@@ -1,4 +1,6 @@
+import { IStyleProps } from "utils/styles/types";
+
 export interface IFigureProps {
   children?: React.ReactNode;
-  className?: string;
+  s?: IStyleProps;
 }

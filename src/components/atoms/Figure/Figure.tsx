@@ -1,10 +1,10 @@
 import { IFigureProps } from './types';
 import classes from './Figure.module.css';
-import classNames from 'classnames';
+import { createStyle } from 'utils';
 
-const Figure = ({ children, className }: IFigureProps): JSX.Element => {
+const Figure = ({ children, s }: IFigureProps): JSX.Element => {
   return (
-    <div className={classNames(classes.figure, className)}>{children}</div>
+    <div {...createStyle(classes.figure, s)}>{children}</div>
   );
 };
 

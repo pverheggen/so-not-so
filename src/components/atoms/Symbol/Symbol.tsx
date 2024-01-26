@@ -1,10 +1,10 @@
-import classNames from 'classnames';
 import classes from './Symbol.module.css';
 import { ISymbolProps } from './types';
+import { createStyle } from 'utils';
 
-const Symbol = ({ style, className }: ISymbolProps): JSX.Element => {
+const Symbol = ({ s }: ISymbolProps): JSX.Element => {
   return (
-    <div className={classNames(classes.symbol, className)} style={style}></div>
+    <div {...createStyle(classes.symbol, s)}></div>
   );
 };
 

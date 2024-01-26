@@ -1,6 +1,5 @@
 import { Figure, Symbol } from 'components';
 import classes from './GridFigure.module.css';
-import toStyleVars from 'utils/toStyleVars';
 import { useMemo } from 'react';
 
 const GridFigure = (): JSX.Element => {
@@ -20,12 +19,11 @@ const GridFigure = (): JSX.Element => {
     return (
       <Symbol
         key={isymbol}
-        className={classes.symbol}
-        style={toStyleVars({ row, col })}
+        s={{ className: classes.symbol, styleVars: { row, col } }}
       />
     );
   };
-  return <Figure className={classes.grid}>{symbols.map(createSymbol)}</Figure>;
+  return <Figure s={{ className: classes.grid }}>{symbols.map(createSymbol)}</Figure>;
 };
 
 export { GridFigure };
