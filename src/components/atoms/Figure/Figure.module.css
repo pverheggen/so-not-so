@@ -7,9 +7,12 @@
   appearance: unset;
   align-items: unset;
   cursor: pointer;
-}
 
-.figure:disabled {
-  cursor: default;
-  border: 2px solid #444;
+  &:disabled {
+    cursor: default;
+    border-color: #444;
+  }
+  &.pass, &.pass:disabled {
+    border-color: #07d34e;
+  }
 }

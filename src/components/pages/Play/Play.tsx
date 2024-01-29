@@ -1,34 +1,29 @@
-import { FigureRow } from "components";
-import { useState } from "react";
-import { FigureRowData, GridFigureTraits } from 'types';
-
-const createFigureSymbols = (): GridFigureTraits =>
-    Array(16)
-        .fill(undefined)
-        .map(() => Math.random() > 0.8 ? { color: 'light', shape: 'square' } : undefined);
-
-const createFigureRow = (key: number): FigureRowData => ({
-    key,
-    figures: Array(4)
-        .fill(undefined)
-        .map(createFigureSymbols)
-});
+import { FigureRow } from 'components';
+import { useState } from 'react';
+import classes from './Play.module.css';
+import { FigureRowData } from 'types';
+import { puzzleService } from 'services';
 
 const Play = (): JSX.Element => {
-    const [currentRow, setCurrentRow] = useState(() => createFigureRow(0));
-    const [pastRows, setPastRows] = useState<FigureRowData[]>([]);
-    const onClick = () => {
-        setCurrentRow(createFigureRow(pastRows.length + 1));
-        setPastRows([currentRow, ...pastRows]);
-    };
-    return (
-        <>
-            <FigureRow selectable figures={currentRow.figures} onClick={onClick} />
-            {
-                pastRows.map(({ key, figures }) => <FigureRow key={key} figures={figures} />)
-            }
-        </>
-    );
-}
+  const [rule] = useState(() => puzzleService.createRule());
+  const [currentRow, setCurrentRow] = useState(() =>
+    puzzleService.createFigureRow(0, rule),
+  );
+  const [pastRows, setPastRows] = useState<FigureRowData[]>([]);
+  const onClick = () => {
+    setCurrentRow(puzzleService.createFigureRow(pastRows.length + 1, rule));
+    setPastRows([currentRow, ...pastRows]);
+  };
+  return (
+    <>
+      <div className={classes.header}>
+        <FigureRow selectable figures={currentRow.figures} onClick={onClick} />
+      </div>
+      {pastRows.map(({ key, figures, passIndex }) => (
+        <FigureRow key={key} figures={figures} passIndex={passIndex} />
+      ))}
+    </>
+  );
+};
 
 export { Play };

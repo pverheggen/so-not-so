@@ -15,5 +15,8 @@ export type GridFigureTraits = SymbolTraits[];
 
 export interface FigureRowData {
   key: number;
+  passIndex: number;
   figures: GridFigureTraits[];
 }
+
+export type FigureRule = (figure: GridFigureTraits) => boolean;

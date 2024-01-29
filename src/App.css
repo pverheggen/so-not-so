@@ -5,11 +5,12 @@ html {
   height: 100%;
   align-items: center;
   justify-content: center;
+  --bg: #040404;
 }
 
 body {
   margin: auto;
-  background-color: #040404;
+  background-color: var(--bg);
 }
 
 .app {

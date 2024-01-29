@@ -5,17 +5,17 @@ import toStyleVars from './toStyleVars';
 const defaultStyleProps = {};
 
 const createStyle = (
-  className: string,
+  classNamesArg: classNames.Argument | classNames.ArgumentArray,
   {
-    className: classNameArg,
-    classNames: classNamesArg,
+    classNames: classNamesOverride,
     styleVars,
   }: IStyleProps | undefined = defaultStyleProps,
 ) => ({
   className: classNames(
-    className,
-    classNameArg,
-    ...(Array.isArray(classNamesArg) ? classNamesArg : [classNames]),
+    ...(Array.isArray(classNamesArg) ? classNamesArg : [classNamesArg]),
+    ...(Array.isArray(classNamesOverride)
+      ? classNamesOverride
+      : [classNamesOverride]),
   ),
   style: toStyleVars(styleVars),
 });
