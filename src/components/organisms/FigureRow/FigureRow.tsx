@@ -1,15 +1,17 @@
 import { GridFigure } from 'components';
 import classes from './FigureRow.module.css';
 import { IFigureRowProps } from './types';
+import { createStyle } from 'utils';
 
 const FigureRow = ({
   onClick,
   passIndex,
   selectable,
+  s,
   figures,
 }: IFigureRowProps): JSX.Element => {
   return (
-    <div className={classes.row}>
+    <div {...createStyle(classes.row, s)}>
       {figures?.map((symbols, ifigure) => (
         <GridFigure
           key={ifigure}

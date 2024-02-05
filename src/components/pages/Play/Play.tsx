@@ -3,7 +3,6 @@ import { useState } from 'react';
 import classes from './Play.module.css';
 import { FigureRowData } from 'types';
 import { puzzleService } from 'services';
-import { useAnimations } from 'hooks';
 import { createStyle } from 'utils';
 
 const Play = (): JSX.Element => {
@@ -12,29 +11,17 @@ const Play = (): JSX.Element => {
     puzzleService.createFigureRow(0, rule),
   );
   const [pastRows, setPastRows] = useState<FigureRowData[]>([]);
-  const {
-    isPlaying,
-    play,
-    styles: [sHeader],
-  } = useAnimations([
-    {
-      classNames: classes.flash,
-      duration: 200,
-    },
-  ]);
   const onClick = async () => {
-    if (isPlaying) return;
-    await play();
     setCurrentRow(puzzleService.createFigureRow(pastRows.length + 1, rule));
     setPastRows([currentRow, ...pastRows]);
   };
   return (
     <>
-      <div {...createStyle(classes.header, sHeader)}>
+      <div {...createStyle(classes.header)}>
         <FigureRow selectable figures={currentRow.figures} onClick={onClick} />
       </div>
       {pastRows.map(({ key, figures, passIndex }) => (
-        <FigureRow key={key} figures={figures} passIndex={passIndex} />
+        <FigureRow key={key} figures={figures} passIndex={passIndex} s={{ classNames: classes.row }} />
       ))}
     </>
   );
