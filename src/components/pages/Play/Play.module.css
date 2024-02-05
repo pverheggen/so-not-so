@@ -3,3 +3,19 @@
     top: 0;
     background-color: var(--bg);
 }
+
+.flash {
+    animation: flash var(--dur);
+}
+
+@keyframes flash {
+    0% {
+        background-color: var(--bg);
+    }
+    50% {
+        background-color: #888;
+    }
+    100% {
+        background-color: var(--bg);
+    }
+}
