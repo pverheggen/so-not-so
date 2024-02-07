@@ -12,13 +12,13 @@ const FigureRow = ({
 }: IFigureRowProps): JSX.Element => {
   return (
     <div {...createStyle(classes.row, s)}>
-      {figures?.map((symbols, ifigure) => (
+      {figures?.map((figure, ifigure) => (
         <GridFigure
           key={ifigure}
           onClick={() => {
             onClick?.(ifigure);
           }}
-          symbols={symbols}
+          figure={figure}
           pass={ifigure === passIndex}
           selectable={selectable}
         />

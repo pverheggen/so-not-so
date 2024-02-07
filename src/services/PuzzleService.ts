@@ -37,7 +37,7 @@ class PuzzleService {
     return {
       key,
       passIndex,
-      figures,
+      figures: figures.map((traits) => ({ traits })),
     };
   }
 }

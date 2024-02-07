@@ -1,8 +1,8 @@
-import { GridFigureTraits } from 'types';
+import { GridFigureData } from 'types';
 
 export interface IGridFigureProps {
   onClick?: () => void;
-  symbols: GridFigureTraits;
+  figure: GridFigureData;
   pass?: boolean;
   selectable?: boolean;
 }

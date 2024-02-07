@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { IStyleProps } from './types';
+import { IStyle, IStyleProps } from './types';
 import toStyleVars from './toStyleVars';
 
 const defaultStyleProps = {};
@@ -10,7 +10,7 @@ const createStyle = (
     classNames: classNamesOverride,
     styleVars,
   }: IStyleProps | undefined = defaultStyleProps,
-) => ({
+): IStyle => ({
   className: classNames(
     ...(Array.isArray(classNamesArg) ? classNamesArg : [classNamesArg]),
     ...(Array.isArray(classNamesOverride)

@@ -1,19 +1,17 @@
 import { useState } from 'react';
-import { IAnimation, IUseAnimationReturn } from 'types';
+import { AnimationLike, IUseAnimationReturn } from 'types';
 import { IStyleProps } from 'utils';
 import { useTimeout } from './useTimeout';
 
 interface IAnimationState {
   resolve?: () => void;
-  styles?: IStyleProps[];
+  styles?: (IStyleProps | undefined)[];
   timeout: number;
 }
 
 const defaultState: IAnimationState = { timeout: 0 };
 
-export const useAnimations = (
-  animations: IAnimation[],
-): IUseAnimationReturn => {
+export const useAnimations = (): IUseAnimationReturn => {
   const [state, setState] = useState<IAnimationState>(defaultState);
   const { resolve, styles, timeout } = state;
   const isPlaying = !!resolve;
@@ -26,11 +24,16 @@ export const useAnimations = (
     timeout,
   );
 
-  const play = async () => {
+  const play = async (animations: AnimationLike[]) => {
     if (isPlaying) return;
-    const styles: IStyleProps[] = [];
+    const styles: (IStyleProps | undefined)[] = [];
     let totalDelay = 0;
-    animations.forEach(({ duration, styleVars, ...s }) => {
+    animations.forEach((animation) => {
+      if (!animation) {
+        styles.push(undefined);
+        return;
+      }
+      const { duration, styleVars, ...s } = animation;
       styles.push({
         ...s,
         styleVars: {

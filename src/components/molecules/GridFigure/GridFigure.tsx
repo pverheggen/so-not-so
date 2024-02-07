@@ -2,13 +2,15 @@ import { Figure, Symbol } from 'components';
 import classes from './GridFigure.module.css';
 import { IGridFigureProps } from './types';
 import { SymbolTraits } from 'types';
+import { addClassNames } from 'utils';
 
 const GridFigure = ({
   onClick,
   pass,
   selectable,
-  symbols,
+  figure,
 }: IGridFigureProps): JSX.Element => {
+  const { traits, s } = figure;
   const createSymbol = (symbol: SymbolTraits, isymbol: number) => {
     if (!symbol) {
       return undefined;
@@ -29,9 +31,9 @@ const GridFigure = ({
       onClick={onClick}
       pass={pass}
       selectable={selectable}
-      s={{ classNames: classes.grid }}
+      s={addClassNames(classes.grid, s)}
     >
-      {symbols?.map(createSymbol)}
+      {traits.map(createSymbol)}
     </Figure>
   );
 };
