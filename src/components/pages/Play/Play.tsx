@@ -1,4 +1,4 @@
-import { FigureRow } from 'components';
+import { FigureRow, ScoreBar } from 'components';
 import { useState } from 'react';
 import classes from './Play.module.css';
 import { FigureRowData } from 'types';
@@ -12,6 +12,7 @@ const Play = (): JSX.Element => {
     puzzleService.createFigureRow(0, rule),
   );
   const [pastRows, setPastRows] = useState<FigureRowData[]>([]);
+  const [score, setScore] = useState(0);
   const currentRowAnimations = useAnimations();
   const { figures, passIndex } = currentRow;
   const styledFigures = currentRowAnimations.styles
@@ -25,6 +26,7 @@ const Play = (): JSX.Element => {
       return;
     }
     if (figureIndex !== passIndex) {
+      setScore(0);
       return currentRowAnimations.play(
         figures.map(
           (_, ifigure) =>
@@ -37,11 +39,13 @@ const Play = (): JSX.Element => {
     }
     setCurrentRow(puzzleService.createFigureRow(pastRows.length + 1, rule));
     setPastRows([currentRow, ...pastRows]);
+    setScore((score) => score + 1);
   };
   return (
     <>
       <div {...createStyle(classes.header)}>
         <FigureRow selectable figures={styledFigures} onClick={onClick} />
+        <ScoreBar maxScore={8} score={score} />
       </div>
       {pastRows.map(({ key, figures, passIndex }) => (
         <FigureRow
