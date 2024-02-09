@@ -7,6 +7,7 @@ import { useAnimations } from 'hooks';
 
 const Play = (): JSX.Element => {
   const [rule] = useState(() => puzzleUtils.createRule());
+  console.log(rule);
   const [currentRow, setCurrentRow] = useState(() =>
     puzzleUtils.createFigureRow(3, rule),
   );
@@ -32,6 +33,9 @@ const Play = (): JSX.Element => {
     if (currentRowAnimations.isPlaying) {
       return;
     }
+    const currentFigure = currentRow.figures[figureIndex];
+    const pass = rule(currentFigure.traits);
+    console.log({ currentFigure, pass });
     if (figureIndex !== passIndex) {
       setScore(0);
       return currentRowAnimations.play(

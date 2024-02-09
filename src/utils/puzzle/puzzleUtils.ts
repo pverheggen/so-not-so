@@ -1,10 +1,10 @@
 import { FigureRowData, FigureRule, GridFigureTraits } from 'types';
 import { randomInt } from 'utils';
+import { allRules } from './allRules';
 
 export const createRule = (): FigureRule => {
-  const numberOfSymbols = randomInt(1, 5);
-  return (figure) =>
-    figure.filter((symbol) => !!symbol).length === numberOfSymbols;
+  const ruleIndex = randomInt(0, allRules.length - 1);
+  return allRules[ruleIndex];
 };
 
 export const createFigureSymbols = (): GridFigureTraits => {

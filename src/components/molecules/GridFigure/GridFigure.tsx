@@ -16,8 +16,8 @@ const GridFigure = ({
       return undefined;
     }
     const columnCount = 4;
-    const row = Math.floor(isymbol / columnCount);
-    const col = isymbol % columnCount;
+    const row = Math.floor(isymbol / columnCount) + 1;
+    const col = isymbol % columnCount + 1;
     return (
       <Symbol
         key={isymbol}
