@@ -2,14 +2,13 @@ import { FigureRow, ScoreBar } from 'components';
 import { useState } from 'react';
 import classes from './Play.module.css';
 import { FigureRowData } from 'types';
-import { puzzleService } from 'services';
-import { createStyle } from 'utils';
+import { createStyle, puzzleUtils } from 'utils';
 import { useAnimations } from 'hooks';
 
 const Play = (): JSX.Element => {
-  const [rule] = useState(() => puzzleService.createRule());
+  const [rule] = useState(() => puzzleUtils.createRule());
   const [currentRow, setCurrentRow] = useState(() =>
-    puzzleService.createFigureRow(0, rule),
+    puzzleUtils.createFigureRow(0, rule),
   );
   const [pastRows, setPastRows] = useState<FigureRowData[]>([]);
   const [score, setScore] = useState(0);
@@ -17,9 +16,9 @@ const Play = (): JSX.Element => {
   const { figures, passIndex } = currentRow;
   const styledFigures = currentRowAnimations.styles
     ? figures.map((figure, ifigure) => ({
-        ...figure,
-        s: currentRowAnimations.styles[ifigure],
-      }))
+      ...figure,
+      s: currentRowAnimations.styles[ifigure],
+    }))
     : figures;
   const onClick = async (figureIndex: number) => {
     if (currentRowAnimations.isPlaying) {
@@ -37,7 +36,7 @@ const Play = (): JSX.Element => {
         ),
       );
     }
-    setCurrentRow(puzzleService.createFigureRow(pastRows.length + 1, rule));
+    setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, rule));
     setPastRows([currentRow, ...pastRows]);
     setScore((score) => score + 1);
   };
