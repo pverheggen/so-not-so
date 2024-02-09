@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { FigureRule } from 'types';
 
 const regions = {
@@ -20,7 +19,7 @@ const arrayCounts = (arr: number[]): number[] =>
 
 type NumberComparison = (quantity: number) => (element: number) => boolean;
 
-const lt: NumberComparison = (quantity) => (element) => element < quantity;
+//const lt: NumberComparison = (quantity) => (element) => element < quantity;
 const eq: NumberComparison = (quantity) => (element) => element === quantity;
 const gt: NumberComparison = (quantity) => (element) => element > quantity;
 
