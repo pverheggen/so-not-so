@@ -10,17 +10,37 @@
 }
 
 .wrong {
-    position: relative;
-    border-color: red;
-    animation-name: wrong;
-    animation-timing-function: ease;
-    animation-duration: var(--dur);
+  position: relative;
+  border-color: red;
+  animation-name: wrong;
+  animation-timing-function: ease;
+  animation-duration: var(--dur);
+}
+
+.win {
+  font-size: 5rem;
+  color: white;
+  font-family: monospace;
+  text-transform: uppercase;
+  display: block;
+  text-align: center;
+  line-height: 22.5rem;
 }
 
 @keyframes wrong {
-    0% { left: 0; }
-    25% { left: 1rem; }
-    50% { left: -1rem; }
-    75% { left: 1rem; }
-    100% { left: 0; }
+  0% {
+    left: 0;
+  }
+  25% {
+    left: 1rem;
+  }
+  50% {
+    left: -1rem;
+  }
+  75% {
+    left: 1rem;
+  }
+  100% {
+    left: 0;
+  }
 }

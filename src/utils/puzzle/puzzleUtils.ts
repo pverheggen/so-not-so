@@ -42,3 +42,15 @@ export const createFigureRow = (
     figures: figures.map((traits) => ({ traits })),
   };
 };
+
+export const sortRow = (row: FigureRowData): FigureRowData => {
+  const { figures: prevFigures, passIndex } = row;
+  const figures = [...prevFigures];
+  const [figureToSplice] = figures.splice(passIndex, 1);
+  figures.splice(0, 0, figureToSplice);
+  return {
+    ...row,
+    passIndex: 0,
+    figures,
+  };
+};
