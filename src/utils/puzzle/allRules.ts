@@ -17,11 +17,15 @@ const arrayCounts = (arr: number[]): number[] =>
     return prev;
   }, [] as number[]);
 
-type NumberComparison = (quantity: number) => (element: number) => boolean;
+type Comparison = (element: number) => boolean;
+type CreateQuantityComparison = (quantity: number) => Comparison;
 
-const lt: NumberComparison = (quantity) => (element) => element < quantity;
-const eq: NumberComparison = (quantity) => (element) => element === quantity;
-const gt: NumberComparison = (quantity) => (element) => element > quantity;
+const lte: CreateQuantityComparison = (quantity) => (element) =>
+  element <= quantity;
+const eq: CreateQuantityComparison = (quantity) => (element) =>
+  element === quantity;
+const gte: CreateQuantityComparison = (quantity) => (element) =>
+  element >= quantity;
 
 const numberOfSymbolsInRegion = (
   region: keyof typeof regions,
@@ -33,18 +37,13 @@ const numberOfSymbolsInRegion = (
     ).length === quantity;
 };
 
-const numberOfSymbols = (
-  quantity: number,
-  comparison: NumberComparison,
-): FigureRule => {
-  return (figure) =>
-    comparison(quantity)(figure.filter((symbol) => !!symbol).length);
+const numberOfSymbols = (comparison: Comparison): FigureRule => {
+  return (figure) => comparison(figure.filter((symbol) => !!symbol).length);
 };
 
 const rowColumnQuantity = (
-  quantity: number,
   rowColumnIndices: number[],
-  comparison: NumberComparison,
+  comparison: Comparison,
 ): FigureRule => {
   return (figure) => {
     const indicesWithSymbols = figure
@@ -53,56 +52,41 @@ const rowColumnQuantity = (
     const rowColumnWithSymbols = indicesWithSymbols.map(
       (i) => rowColumnIndices[i],
     );
-    const predicate = comparison(quantity);
-    return arrayCounts(rowColumnWithSymbols).some(predicate);
+    return arrayCounts(rowColumnWithSymbols).some(comparison);
   };
 };
 
-const rowAndColumnQuantity = (
-  quantity: number,
-  comparison: NumberComparison,
-): FigureRule => {
-  const rowRule = rowColumnQuantity(quantity, symbolRowIndices, comparison);
-  const columnRule = rowColumnQuantity(
-    quantity,
-    symbolColumnIndices,
-    comparison,
-  );
+const rowAndColumnQuantity = (comparison: Comparison): FigureRule => {
+  const rowRule = rowColumnQuantity(symbolRowIndices, comparison);
+  const columnRule = rowColumnQuantity(symbolColumnIndices, comparison);
   return (figure) => rowRule(figure) && columnRule(figure);
 };
 
-const noRowAndColumnQuantity = (
-  quantity: number,
-  comparison: NumberComparison,
-): FigureRule => {
-  const rowRule = rowColumnQuantity(quantity, symbolRowIndices, comparison);
-  const columnRule = rowColumnQuantity(
-    quantity,
-    symbolColumnIndices,
-    comparison,
-  );
+const noRowAndColumnQuantity = (comparison: Comparison): FigureRule => {
+  const rowRule = rowColumnQuantity(symbolRowIndices, comparison);
+  const columnRule = rowColumnQuantity(symbolColumnIndices, comparison);
   return (figure) => !rowRule(figure) && !columnRule(figure);
 };
 
 export const allRules = [
-  numberOfSymbols(1, eq),
-  numberOfSymbols(2, eq),
-  numberOfSymbols(3, eq),
-  numberOfSymbols(4, eq),
-  numberOfSymbols(5, eq),
-  numberOfSymbols(3, lt),
-  numberOfSymbols(3, gt),
-  numberOfSymbols(4, gt),
+  numberOfSymbols(eq(1)),
+  numberOfSymbols(eq(1)),
+  numberOfSymbols(eq(1)),
+  numberOfSymbols(eq(1)),
+  numberOfSymbols(eq(1)),
+  numberOfSymbols(lte(2)),
+  numberOfSymbols(gte(4)),
+  numberOfSymbols(gte(5)),
   numberOfSymbolsInRegion('center', 1),
   numberOfSymbolsInRegion('leftTopDiag', 3),
   numberOfSymbolsInRegion('rightTopDiag', 3),
   numberOfSymbolsInRegion('corners', 1),
   numberOfSymbolsInRegion('edges', 2),
-  rowColumnQuantity(2, symbolRowIndices, eq),
-  rowColumnQuantity(3, symbolRowIndices, eq),
-  rowColumnQuantity(2, symbolColumnIndices, eq),
-  rowColumnQuantity(3, symbolColumnIndices, eq),
-  rowAndColumnQuantity(2, eq),
-  noRowAndColumnQuantity(2, gt),
-  noRowAndColumnQuantity(3, gt),
+  rowColumnQuantity(symbolRowIndices, eq(2)),
+  rowColumnQuantity(symbolRowIndices, eq(3)),
+  rowColumnQuantity(symbolColumnIndices, eq(3)),
+  rowColumnQuantity(symbolColumnIndices, eq(3)),
+  rowAndColumnQuantity(eq(2)),
+  noRowAndColumnQuantity(gte(3)),
+  noRowAndColumnQuantity(gte(4)),
 ];
