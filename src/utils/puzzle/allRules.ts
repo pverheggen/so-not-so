@@ -5,7 +5,7 @@ const regions = {
   leftTopDiag: [0, 5, 10, 15],
   rightTopDiag: [3, 6, 9, 12],
   corners: [0, 3, 12, 15],
-  edges: [0, 1, 2, 3, 4, 7, 8, 11, 12, 15],
+  edges: [0, 1, 2, 3, 4, 7, 8, 11, 12, 13, 14, 15],
 };
 
 const symbolRowIndices = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
@@ -19,7 +19,7 @@ const arrayCounts = (arr: number[]): number[] =>
 
 type NumberComparison = (quantity: number) => (element: number) => boolean;
 
-//const lt: NumberComparison = (quantity) => (element) => element < quantity;
+const lt: NumberComparison = (quantity) => (element) => element < quantity;
 const eq: NumberComparison = (quantity) => (element) => element === quantity;
 const gt: NumberComparison = (quantity) => (element) => element > quantity;
 
@@ -33,8 +33,12 @@ const numberOfSymbolsInRegion = (
     ).length === quantity;
 };
 
-const numberOfSymbols = (quantity: number): FigureRule => {
-  return (figure) => figure.filter((symbol) => !!symbol).length === quantity;
+const numberOfSymbols = (
+  quantity: number,
+  comparison: NumberComparison,
+): FigureRule => {
+  return (figure) =>
+    comparison(quantity)(figure.filter((symbol) => !!symbol).length);
 };
 
 const rowColumnQuantity = (
@@ -81,11 +85,14 @@ const noRowAndColumnQuantity = (
 };
 
 export const allRules = [
-  numberOfSymbols(1),
-  numberOfSymbols(2),
-  numberOfSymbols(3),
-  numberOfSymbols(4),
-  numberOfSymbols(5),
+  numberOfSymbols(1, eq),
+  numberOfSymbols(2, eq),
+  numberOfSymbols(3, eq),
+  numberOfSymbols(4, eq),
+  numberOfSymbols(5, eq),
+  numberOfSymbols(3, lt),
+  numberOfSymbols(3, gt),
+  numberOfSymbols(4, gt),
   numberOfSymbolsInRegion('center', 1),
   numberOfSymbolsInRegion('leftTopDiag', 3),
   numberOfSymbolsInRegion('rightTopDiag', 3),
