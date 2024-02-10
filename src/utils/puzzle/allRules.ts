@@ -12,10 +12,13 @@ const symbolRowIndices = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
 const symbolColumnIndices = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
 
 const arrayCounts = (arr: number[]): number[] =>
-  arr.reduce((prev, element) => {
-    prev[element] = (prev[element] ?? 0) + 1;
-    return prev;
-  }, [] as number[]);
+  arr.reduce(
+    (prev, element) => {
+      prev[element] = prev[element] + 1;
+      return prev;
+    },
+    [0, 0, 0, 0],
+  );
 
 type Comparison = (element: number) => boolean;
 type CreateQuantityComparison = (quantity: number) => Comparison;
@@ -26,6 +29,7 @@ const eq: CreateQuantityComparison = (quantity) => (element) =>
   element === quantity;
 const gte: CreateQuantityComparison = (quantity) => (element) =>
   element >= quantity;
+const any: Comparison = gte(1);
 const even: Comparison = (element) => element % 2 === 0;
 const odd: Comparison = (element) => element % 2 === 1;
 
@@ -47,7 +51,8 @@ const numberOfSymbols = (comparison: Comparison): FigureRule => {
 
 const rowColumnQuantity = (
   rowColumnIndices: number[],
-  comparison: Comparison,
+  elementComparison: Comparison,
+  rowColumnComparison: Comparison,
 ): FigureRule => {
   return (figure) => {
     const indicesWithSymbols = figure
@@ -56,19 +61,43 @@ const rowColumnQuantity = (
     const rowColumnWithSymbols = indicesWithSymbols.map(
       (i) => rowColumnIndices[i],
     );
-    return arrayCounts(rowColumnWithSymbols).some(comparison);
+    return rowColumnComparison(
+      arrayCounts(rowColumnWithSymbols).filter(elementComparison).length,
+    );
   };
 };
 
-const rowAndColumnQuantity = (comparison: Comparison): FigureRule => {
-  const rowRule = rowColumnQuantity(symbolRowIndices, comparison);
-  const columnRule = rowColumnQuantity(symbolColumnIndices, comparison);
+const rowAndColumnQuantity = (
+  elementComparison: Comparison,
+  rowColumnComparison: Comparison,
+): FigureRule => {
+  const rowRule = rowColumnQuantity(
+    symbolRowIndices,
+    elementComparison,
+    rowColumnComparison,
+  );
+  const columnRule = rowColumnQuantity(
+    symbolColumnIndices,
+    elementComparison,
+    rowColumnComparison,
+  );
   return (figure) => rowRule(figure) && columnRule(figure);
 };
 
-const noRowAndColumnQuantity = (comparison: Comparison): FigureRule => {
-  const rowRule = rowColumnQuantity(symbolRowIndices, comparison);
-  const columnRule = rowColumnQuantity(symbolColumnIndices, comparison);
+const noRowAndColumnQuantity = (
+  elementComparison: Comparison,
+  rowColumnComparison: Comparison,
+): FigureRule => {
+  const rowRule = rowColumnQuantity(
+    symbolRowIndices,
+    elementComparison,
+    rowColumnComparison,
+  );
+  const columnRule = rowColumnQuantity(
+    symbolColumnIndices,
+    elementComparison,
+    rowColumnComparison,
+  );
   return (figure) => !rowRule(figure) && !columnRule(figure);
 };
 
@@ -90,11 +119,19 @@ export const allRules = [
   numberOfSymbolsInRegion('edges', eq(2)),
   numberOfSymbolsInRegion('edges', even),
   numberOfSymbolsInRegion('edges', odd),
-  rowColumnQuantity(symbolRowIndices, eq(2)),
-  rowColumnQuantity(symbolRowIndices, eq(3)),
-  rowColumnQuantity(symbolColumnIndices, eq(3)),
-  rowColumnQuantity(symbolColumnIndices, eq(3)),
-  rowAndColumnQuantity(eq(2)),
-  noRowAndColumnQuantity(gte(3)),
-  noRowAndColumnQuantity(gte(4)),
+  rowColumnQuantity(symbolRowIndices, eq(2), any),
+  rowColumnQuantity(symbolRowIndices, eq(3), any),
+  rowColumnQuantity(symbolRowIndices, any, eq(1)),
+  rowColumnQuantity(symbolRowIndices, any, eq(2)),
+  rowColumnQuantity(symbolRowIndices, any, eq(3)),
+  rowColumnQuantity(symbolRowIndices, any, eq(4)),
+  rowColumnQuantity(symbolColumnIndices, eq(2), any),
+  rowColumnQuantity(symbolColumnIndices, eq(3), any),
+  rowColumnQuantity(symbolColumnIndices, any, eq(1)),
+  rowColumnQuantity(symbolColumnIndices, any, eq(2)),
+  rowColumnQuantity(symbolColumnIndices, any, eq(3)),
+  rowColumnQuantity(symbolColumnIndices, any, eq(4)),
+  rowAndColumnQuantity(eq(2), any),
+  noRowAndColumnQuantity(gte(3), any),
+  noRowAndColumnQuantity(gte(4), any),
 ];
