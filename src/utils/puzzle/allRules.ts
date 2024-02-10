@@ -26,15 +26,19 @@ const eq: CreateQuantityComparison = (quantity) => (element) =>
   element === quantity;
 const gte: CreateQuantityComparison = (quantity) => (element) =>
   element >= quantity;
+const even: Comparison = (element) => element % 2 === 0;
+const odd: Comparison = (element) => element % 2 === 1;
 
 const numberOfSymbolsInRegion = (
   region: keyof typeof regions,
-  quantity: number,
+  comparison: Comparison,
 ): FigureRule => {
   return (figure) =>
-    figure.filter(
-      (symbol, isymbol) => !!symbol && regions[region].includes(isymbol),
-    ).length === quantity;
+    comparison(
+      figure.filter(
+        (symbol, isymbol) => !!symbol && regions[region].includes(isymbol),
+      ).length,
+    );
 };
 
 const numberOfSymbols = (comparison: Comparison): FigureRule => {
@@ -69,6 +73,8 @@ const noRowAndColumnQuantity = (comparison: Comparison): FigureRule => {
 };
 
 export const allRules = [
+  numberOfSymbols(even),
+  numberOfSymbols(odd),
   numberOfSymbols(eq(1)),
   numberOfSymbols(eq(1)),
   numberOfSymbols(eq(1)),
@@ -77,11 +83,13 @@ export const allRules = [
   numberOfSymbols(lte(2)),
   numberOfSymbols(gte(4)),
   numberOfSymbols(gte(5)),
-  numberOfSymbolsInRegion('center', 1),
-  numberOfSymbolsInRegion('leftTopDiag', 3),
-  numberOfSymbolsInRegion('rightTopDiag', 3),
-  numberOfSymbolsInRegion('corners', 1),
-  numberOfSymbolsInRegion('edges', 2),
+  numberOfSymbolsInRegion('center', eq(1)),
+  numberOfSymbolsInRegion('leftTopDiag', eq(3)),
+  numberOfSymbolsInRegion('rightTopDiag', eq(3)),
+  numberOfSymbolsInRegion('corners', eq(1)),
+  numberOfSymbolsInRegion('edges', eq(2)),
+  numberOfSymbolsInRegion('edges', even),
+  numberOfSymbolsInRegion('edges', odd),
   rowColumnQuantity(symbolRowIndices, eq(2)),
   rowColumnQuantity(symbolRowIndices, eq(3)),
   rowColumnQuantity(symbolColumnIndices, eq(3)),
