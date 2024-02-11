@@ -6,6 +6,8 @@ const regions = {
   rightTopDiag: [3, 6, 9, 12],
   corners: [0, 3, 12, 15],
   edges: [0, 1, 2, 3, 4, 7, 8, 11, 12, 13, 14, 15],
+  checker1: [0, 2, 5, 7, 8, 10, 13, 15],
+  checker2: [1, 3, 4, 6, 9, 11, 12, 14],
 };
 
 const symbolRowIndices = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
@@ -36,11 +38,15 @@ const eq: CreateQuantityComparison = (quantity) => (element) =>
 const gte: CreateQuantityComparison = (quantity) => (element) =>
   element >= quantity;
 const any: Comparison = gte(1);
+const none: Comparison = eq(0);
 const even: Comparison = (element) => element % 2 === 0;
 const odd: Comparison = (element) => element % 2 === 1;
 
 const ruleAnd: RuleCombination = (rule1, rule2) => (figure) =>
   rule1(figure) && rule2(figure);
+
+const ruleXor: RuleCombination = (rule1, rule2) => (figure) =>
+  rule1(figure) != rule2(figure);
 
 const ruleNor: RuleCombination = (rule1, rule2) => (figure) =>
   !rule1(figure) && !rule2(figure);
@@ -146,5 +152,21 @@ export const allRules: FigureRule[] = [
   ruleGt(
     rowColumnCount(symbolColumnIndices, any),
     rowColumnCount(symbolRowIndices, any),
+  ),
+  ruleAnd(
+    numberOfSymbolsInRegion('checker1', any),
+    numberOfSymbolsInRegion('checker2', none),
+  ),
+  ruleAnd(
+    numberOfSymbolsInRegion('checker1', none),
+    numberOfSymbolsInRegion('checker2', any),
+  ),
+  ruleXor(
+    numberOfSymbolsInRegion('checker1', any),
+    numberOfSymbolsInRegion('checker2', any),
+  ),
+  ruleAnd(
+    numberOfSymbolsInRegion('checker1', any),
+    numberOfSymbolsInRegion('checker2', any),
   ),
 ];
