@@ -22,6 +22,7 @@ const arrayCounts = (arr: number[]): number[] =>
 
 type Comparison = (element: number) => boolean;
 type CreateQuantityComparison = (quantity: number) => Comparison;
+type RuleCombination = (rule1: FigureRule, rule2: FigureRule) => FigureRule;
 
 const lte: CreateQuantityComparison = (quantity) => (element) =>
   element <= quantity;
@@ -32,6 +33,12 @@ const gte: CreateQuantityComparison = (quantity) => (element) =>
 const any: Comparison = gte(1);
 const even: Comparison = (element) => element % 2 === 0;
 const odd: Comparison = (element) => element % 2 === 1;
+
+const ruleAnd: RuleCombination = (rule1, rule2) => (figure) =>
+  rule1(figure) && rule2(figure);
+
+const ruleNor: RuleCombination = (rule1, rule2) => (figure) =>
+  !rule1(figure) && !rule2(figure);
 
 const numberOfSymbolsInRegion = (
   region: keyof typeof regions,
@@ -67,41 +74,7 @@ const rowColumnQuantity = (
   };
 };
 
-const rowAndColumnQuantity = (
-  elementComparison: Comparison,
-  rowColumnComparison: Comparison,
-): FigureRule => {
-  const rowRule = rowColumnQuantity(
-    symbolRowIndices,
-    elementComparison,
-    rowColumnComparison,
-  );
-  const columnRule = rowColumnQuantity(
-    symbolColumnIndices,
-    elementComparison,
-    rowColumnComparison,
-  );
-  return (figure) => rowRule(figure) && columnRule(figure);
-};
-
-const noRowAndColumnQuantity = (
-  elementComparison: Comparison,
-  rowColumnComparison: Comparison,
-): FigureRule => {
-  const rowRule = rowColumnQuantity(
-    symbolRowIndices,
-    elementComparison,
-    rowColumnComparison,
-  );
-  const columnRule = rowColumnQuantity(
-    symbolColumnIndices,
-    elementComparison,
-    rowColumnComparison,
-  );
-  return (figure) => !rowRule(figure) && !columnRule(figure);
-};
-
-export const allRules = [
+export const allRules: FigureRule[] = [
   numberOfSymbols(even),
   numberOfSymbols(odd),
   numberOfSymbols(eq(1)),
@@ -131,7 +104,16 @@ export const allRules = [
   rowColumnQuantity(symbolColumnIndices, any, eq(2)),
   rowColumnQuantity(symbolColumnIndices, any, eq(3)),
   rowColumnQuantity(symbolColumnIndices, any, eq(4)),
-  rowAndColumnQuantity(eq(2), any),
-  noRowAndColumnQuantity(gte(3), any),
-  noRowAndColumnQuantity(gte(4), any),
+  ruleAnd(
+    rowColumnQuantity(symbolRowIndices, eq(2), any),
+    rowColumnQuantity(symbolColumnIndices, eq(2), any),
+  ),
+  ruleNor(
+    rowColumnQuantity(symbolRowIndices, gte(3), any),
+    rowColumnQuantity(symbolColumnIndices, gte(3), any),
+  ),
+  ruleNor(
+    rowColumnQuantity(symbolRowIndices, gte(4), any),
+    rowColumnQuantity(symbolColumnIndices, gte(4), any),
+  ),
 ];
