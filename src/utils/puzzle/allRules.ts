@@ -1,8 +1,4 @@
-import {
-  FigureRule,
-  FigureRuleNumber as NumberRule,
-  GridFigureTraits,
-} from 'types';
+import { FigureRule, GridFigureTraits } from 'types';
 
 const regions = {
   center: [5, 6, 9, 10],
