@@ -7,11 +7,10 @@ import { useAnimations } from 'hooks';
 
 const Play = (): JSX.Element => {
   const [rule] = useState(() => puzzleUtils.createRule());
-  console.log(rule);
   const [currentRow, setCurrentRow] = useState(() =>
     puzzleUtils.createFigureRow(3, rule),
   );
-  const [pastRows, setPastRows] = useState<FigureRowData[]>([
+  const [pastRows, setPastRows] = useState<FigureRowData[]>(() => [
     puzzleUtils.sortRow(puzzleUtils.createFigureRow(2, rule)),
     puzzleUtils.sortRow(puzzleUtils.createFigureRow(1, rule)),
     puzzleUtils.sortRow(puzzleUtils.createFigureRow(0, rule)),
@@ -24,9 +23,9 @@ const Play = (): JSX.Element => {
   const { figures, passIndex } = currentRow;
   const styledFigures = currentRowAnimations.styles
     ? figures.map((figure, ifigure) => ({
-      ...figure,
-      s: currentRowAnimations.styles[ifigure],
-    }))
+        ...figure,
+        s: currentRowAnimations.styles[ifigure],
+      }))
     : figures;
 
   const onClick = async (figureIndex: number) => {
@@ -35,7 +34,6 @@ const Play = (): JSX.Element => {
     }
     const currentFigure = currentRow.figures[figureIndex];
     const pass = rule(currentFigure.traits);
-    console.log({ currentFigure, pass });
     if (figureIndex !== passIndex) {
       setScore(0);
       return currentRowAnimations.play(
@@ -56,7 +54,9 @@ const Play = (): JSX.Element => {
     <>
       <div {...createStyle(classes.header)}>
         {isWin && <span {...createStyle(classes.win)}>You Win</span>}
-        {!isWin && <FigureRow selectable figures={styledFigures} onClick={onClick} />}
+        {!isWin && (
+          <FigureRow selectable figures={styledFigures} onClick={onClick} />
+        )}
         <ScoreBar maxScore={maxScore} score={score} />
       </div>
       {pastRows.map(({ key, figures, passIndex }) => (
