@@ -24,32 +24,31 @@ const arrayCounts = (arr: number[]): number[] =>
     [0, 0, 0, 0],
   );
 
-type Comparison = (element: number) => boolean;
-type CreateQuantityComparison = (quantity: number) => Comparison;
-type NumberArrayComparison = (array: number[]) => boolean;
 type RuleCombination = (rule1: FigureRule, rule2: FigureRule) => FigureRule;
+
+type NumberComparison = (number: number) => boolean;
+type CreateNumberComparison = (number: number) => NumberComparison;
 type NumberRule = (figure: GridFigureTraits) => number;
-type NumberArrayRule = (figure: GridFigureTraits) => number[];
 type NumberRuleCombination = (
   rule1: NumberRule,
   rule2: NumberRule,
 ) => FigureRule;
 
-const lte: CreateQuantityComparison = (quantity) => (element) =>
-  element <= quantity;
-const eq: CreateQuantityComparison = (quantity) => (element) =>
-  element === quantity;
-const gte: CreateQuantityComparison = (quantity) => (element) =>
-  element >= quantity;
-const any: Comparison = gte(1);
-const none: Comparison = eq(0);
-const even: Comparison = (element) => element % 2 === 0;
-const odd: Comparison = (element) => element % 2 === 1;
+type NumberArrayComparison = (array: number[]) => boolean;
+type NumberArrayRule = (figure: GridFigureTraits) => number[];
+
+const lte: CreateNumberComparison = (number) => (element) => element <= number;
+const eq: CreateNumberComparison = (number) => (element) => element === number;
+const gte: CreateNumberComparison = (number) => (element) => element >= number;
+const any: NumberComparison = gte(1);
+const none: NumberComparison = eq(0);
+const even: NumberComparison = (element) => element % 2 === 0;
+const odd: NumberComparison = (element) => element % 2 === 1;
 
 const arrayFirst =
   (
-    findComparison: Comparison,
-    elementComparison: Comparison,
+    findComparison: NumberComparison,
+    elementComparison: NumberComparison,
   ): NumberArrayComparison =>
   (array) => {
     const element = array.find(findComparison);
@@ -80,7 +79,7 @@ const ruleGt: NumberRuleCombination = (rule1, rule2) => (figure) =>
 
 const numberOfSymbolsInRegion = (
   region: keyof typeof regions,
-  comparison: Comparison,
+  comparison: NumberComparison,
 ): FigureRule => {
   return (figure) =>
     comparison(
@@ -90,7 +89,7 @@ const numberOfSymbolsInRegion = (
     );
 };
 
-const numberOfSymbols = (comparison: Comparison): FigureRule => {
+const numberOfSymbols = (comparison: NumberComparison): FigureRule => {
   return (figure) => comparison(figure.filter((symbol) => !!symbol).length);
 };
 
@@ -108,7 +107,7 @@ const allRowColumnCounts = (rowColumnIndices: number[]): NumberArrayRule => {
 
 const rowColumnCount = (
   rowColumnIndices: number[],
-  elementComparison: Comparison,
+  elementComparison: NumberComparison,
 ): NumberRule => {
   return (figure) =>
     allRowColumnCounts(rowColumnIndices)(figure).filter(elementComparison)
@@ -117,8 +116,8 @@ const rowColumnCount = (
 
 const rowColumnCompare = (
   rowColumnIndices: number[],
-  elementComparison: Comparison,
-  rowColumnComparison: Comparison,
+  elementComparison: NumberComparison,
+  rowColumnComparison: NumberComparison,
 ): FigureRule => {
   return (figure) =>
     rowColumnComparison(
