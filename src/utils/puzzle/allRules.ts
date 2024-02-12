@@ -1,4 +1,5 @@
 import { FigureRule, GridFigureTraits } from 'types';
+import { chain } from './ruleUtils';
 
 const regions = {
   center: [5, 6, 9, 10],
@@ -89,9 +90,8 @@ const numberOfSymbolsInRegion = (
     );
 };
 
-const numberOfSymbols = (comparison: NumberComparison): FigureRule => {
-  return (figure) => comparison(figure.filter((symbol) => !!symbol).length);
-};
+const count = (figure: GridFigureTraits): number =>
+  figure.filter((symbol) => !!symbol).length;
 
 const allRowColumnCounts = (rowColumnIndices: number[]): NumberArrayRule => {
   return (figure) => {
@@ -126,16 +126,15 @@ const rowColumnCompare = (
 };
 
 export const allRules: FigureRule[] = [
-  numberOfSymbols(even),
-  numberOfSymbols(odd),
-  numberOfSymbols(eq(1)),
-  numberOfSymbols(eq(1)),
-  numberOfSymbols(eq(1)),
-  numberOfSymbols(eq(1)),
-  numberOfSymbols(eq(1)),
-  numberOfSymbols(lte(2)),
-  numberOfSymbols(gte(4)),
-  numberOfSymbols(gte(5)),
+  chain(count, even),
+  chain(count, odd),
+  chain(count, eq(1)),
+  chain(count, eq(2)),
+  chain(count, eq(3)),
+  chain(count, eq(4)),
+  chain(count, lte(2)),
+  chain(count, gte(4)),
+  chain(count, gte(5)),
   numberOfSymbolsInRegion('center', eq(1)),
   numberOfSymbolsInRegion('leftTopDiag', eq(3)),
   numberOfSymbolsInRegion('rightTopDiag', eq(3)),
