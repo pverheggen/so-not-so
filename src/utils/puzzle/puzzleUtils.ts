@@ -25,6 +25,9 @@ export const createFigureRow = (
   const failsCount = 3;
   while (passes.length < passesCount || fails.length < failsCount) {
     const figure = createFigureSymbols();
+    if (figure.every((symbol) => symbol === undefined)) {
+      continue;
+    }
     const isRule = rule(figure);
     if (isRule && passes.length < passesCount) {
       passes.push(figure);
