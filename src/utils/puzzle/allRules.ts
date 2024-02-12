@@ -71,6 +71,11 @@ const first =
     return !!symbol && cSymbol_b(symbol);
   };
 
+const ordered: NumberArrayComparison = (array) =>
+  array.every(
+    (symbol, isymbol) => isymbol === 0 || symbol >= array[isymbol - 1],
+  );
+
 const ruleAnd: RuleCombination = (rule1, rule2) => (figure) =>
   rule1(figure) && rule2(figure);
 
@@ -161,4 +166,8 @@ export const allRules: FigureRule[] = [
   f_ra_ca_b('col', first(any, eq(2))),
   f_ra_ca_b('rowReverse', first(any, eq(2))),
   f_ra_ca_b('colReverse', first(any, eq(2))),
+  f_ra_ca_b('row', ordered),
+  f_ra_ca_b('col', ordered),
+  f_ra_ca_b('rowReverse', ordered),
+  f_ra_ca_b('colReverse', ordered),
 ];
