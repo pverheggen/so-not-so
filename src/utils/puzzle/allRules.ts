@@ -61,22 +61,15 @@ const regionArray = (regionArrayKey: RegionArrayKey): FigureArrayMapper => {
     );
 };
 
-const arrayFirst =
+const first =
   (
-    findComparison: NumberComparison,
-    elementComparison: NumberComparison,
+    cRegion_b: NumberComparison,
+    cSymbol_b: NumberComparison,
   ): NumberArrayComparison =>
   (array) => {
-    const element = array.find(findComparison);
-    return element === undefined ? false : elementComparison(element);
+    const symbol = array.find(cRegion_b);
+    return !!symbol && cSymbol_b(symbol);
   };
-
-const ruleArray = (
-  rule: NumberArrayRule,
-  comparison: NumberArrayComparison,
-): FigureRule => {
-  return (figure) => comparison(rule(figure));
-};
 
 const ruleAnd: RuleCombination = (rule1, rule2) => (figure) =>
   rule1(figure) && rule2(figure);
@@ -105,6 +98,11 @@ const f_r_c_b = (rKey: RegionKey, c_b: NumberComparison): FigureRule =>
 
 const f_ra_ca = (raKey: RegionArrayKey): NumberArrayRule =>
   chain(regionArray(raKey), map(count));
+
+const f_ra_ca_b = (
+  raKey: RegionArrayKey,
+  ca_b: NumberArrayComparison,
+): FigureRule => chain(f_ra_ca(raKey), ca_b);
 
 const f_ra_ca_c = (
   raKey: RegionArrayKey,
@@ -159,8 +157,8 @@ export const allRules: FigureRule[] = [
   ruleAnd(f_r_c_b('checker1', none), f_r_c_b('checker2', any)),
   ruleXor(f_r_c_b('checker1', any), f_r_c_b('checker2', any)),
   ruleAnd(f_r_c_b('checker1', any), f_r_c_b('checker2', any)),
-  ruleArray(f_ra_ca('row'), arrayFirst(any, eq(2))),
-  ruleArray(f_ra_ca('col'), arrayFirst(any, eq(2))),
-  ruleArray(f_ra_ca('rowReverse'), arrayFirst(any, eq(2))),
-  ruleArray(f_ra_ca('colReverse'), arrayFirst(any, eq(2))),
+  f_ra_ca_b('row', first(any, eq(2))),
+  f_ra_ca_b('col', first(any, eq(2))),
+  f_ra_ca_b('rowReverse', first(any, eq(2))),
+  f_ra_ca_b('colReverse', first(any, eq(2))),
 ];
