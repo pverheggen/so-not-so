@@ -12,9 +12,16 @@ const regions = {
 };
 
 const symbolRowIndices = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
-const symbolColumnIndices = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
-const symbolReverseRowIndices = [...symbolRowIndices].reverse();
-const symbolReverseColumnIndices = [...symbolColumnIndices].reverse();
+const symbolColIndices = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
+const symbolRowReverseIndices = [...symbolRowIndices].reverse();
+const symbolColReverseIndices = [...symbolColIndices].reverse();
+
+const regionArrays = {
+  row: symbolRowIndices,
+  col: symbolColIndices,
+  rowReverse: symbolRowReverseIndices,
+  colReverse: symbolColReverseIndices,
+};
 
 const arrayCounts = (arr: number[]): number[] =>
   arr.reduce(
@@ -25,6 +32,7 @@ const arrayCounts = (arr: number[]): number[] =>
     [0, 0, 0, 0],
   );
 
+type FigureFilter = (figure: GridFigureTraits) => GridFigureTraits;
 type RuleCombination = (rule1: FigureRule, rule2: FigureRule) => FigureRule;
 
 type NumberComparison = (number: number) => boolean;
@@ -78,20 +86,21 @@ const ruleEq: NumberRuleCombination = (rule1, rule2) => (figure) =>
 const ruleGt: NumberRuleCombination = (rule1, rule2) => (figure) =>
   rule1(figure) > rule2(figure);
 
-const numberOfSymbolsInRegion = (
-  region: keyof typeof regions,
-  comparison: NumberComparison,
-): FigureRule => {
-  return (figure) =>
-    comparison(
-      figure.filter(
-        (symbol, isymbol) => !!symbol && regions[region].includes(isymbol),
-      ).length,
-    );
+const region = (regionKey: keyof typeof regions): FigureFilter => {
+  const region = regions[regionKey];
+  return (figure) => region.map((ifigure) => figure[ifigure]);
 };
 
 const count = (figure: GridFigureTraits): number =>
   figure.filter((symbol) => !!symbol).length;
+
+const f2count2b = (comparison: NumberComparison): FigureRule =>
+  chain(count, comparison);
+
+const f2region2count2b = (
+  regionKey: keyof typeof regions,
+  comparison: NumberComparison,
+): FigureRule => chain(region(regionKey), count, comparison);
 
 const allRowColumnCounts = (rowColumnIndices: number[]): NumberArrayRule => {
   return (figure) => {
@@ -126,22 +135,23 @@ const rowColumnCompare = (
 };
 
 export const allRules: FigureRule[] = [
-  chain(count, even),
-  chain(count, odd),
-  chain(count, eq(1)),
-  chain(count, eq(2)),
-  chain(count, eq(3)),
-  chain(count, eq(4)),
-  chain(count, lte(2)),
-  chain(count, gte(4)),
-  chain(count, gte(5)),
-  numberOfSymbolsInRegion('center', eq(1)),
-  numberOfSymbolsInRegion('leftTopDiag', eq(3)),
-  numberOfSymbolsInRegion('rightTopDiag', eq(3)),
-  numberOfSymbolsInRegion('corners', eq(1)),
-  numberOfSymbolsInRegion('edges', eq(2)),
-  numberOfSymbolsInRegion('edges', even),
-  numberOfSymbolsInRegion('edges', odd),
+  f2count2b(even),
+  f2count2b(odd),
+  f2count2b(eq(1)),
+  f2count2b(eq(1)),
+  f2count2b(eq(1)),
+  f2count2b(eq(1)),
+  f2count2b(eq(1)),
+  f2count2b(lte(2)),
+  f2count2b(gte(4)),
+  f2count2b(gte(5)),
+  f2region2count2b('center', eq(1)),
+  f2region2count2b('leftTopDiag', eq(3)),
+  f2region2count2b('rightTopDiag', eq(3)),
+  f2region2count2b('corners', eq(1)),
+  f2region2count2b('edges', eq(2)),
+  f2region2count2b('edges', even),
+  f2region2count2b('edges', odd),
   rowColumnCompare(symbolRowIndices, eq(2), any),
   rowColumnCompare(symbolRowIndices, eq(3), any),
   rowColumnCompare(symbolRowIndices, eq(4), any),
@@ -149,61 +159,55 @@ export const allRules: FigureRule[] = [
   rowColumnCompare(symbolRowIndices, any, eq(2)),
   rowColumnCompare(symbolRowIndices, any, eq(3)),
   rowColumnCompare(symbolRowIndices, any, gte(3)),
-  rowColumnCompare(symbolColumnIndices, eq(2), any),
-  rowColumnCompare(symbolColumnIndices, eq(3), any),
-  rowColumnCompare(symbolColumnIndices, eq(4), any),
-  rowColumnCompare(symbolColumnIndices, any, eq(1)),
-  rowColumnCompare(symbolColumnIndices, any, eq(2)),
-  rowColumnCompare(symbolColumnIndices, any, eq(3)),
-  rowColumnCompare(symbolColumnIndices, any, gte(3)),
+  rowColumnCompare(symbolColIndices, eq(2), any),
+  rowColumnCompare(symbolColIndices, eq(3), any),
+  rowColumnCompare(symbolColIndices, eq(4), any),
+  rowColumnCompare(symbolColIndices, any, eq(1)),
+  rowColumnCompare(symbolColIndices, any, eq(2)),
+  rowColumnCompare(symbolColIndices, any, eq(3)),
+  rowColumnCompare(symbolColIndices, any, gte(3)),
   ruleAnd(
     rowColumnCompare(symbolRowIndices, eq(2), any),
-    rowColumnCompare(symbolColumnIndices, eq(2), any),
+    rowColumnCompare(symbolColIndices, eq(2), any),
   ),
   ruleNor(
     rowColumnCompare(symbolRowIndices, gte(3), any),
-    rowColumnCompare(symbolColumnIndices, gte(3), any),
+    rowColumnCompare(symbolColIndices, gte(3), any),
   ),
   ruleNor(
     rowColumnCompare(symbolRowIndices, gte(4), any),
-    rowColumnCompare(symbolColumnIndices, gte(4), any),
+    rowColumnCompare(symbolColIndices, gte(4), any),
   ),
   ruleEq(
     rowColumnCount(symbolRowIndices, any),
-    rowColumnCount(symbolColumnIndices, any),
+    rowColumnCount(symbolColIndices, any),
   ),
   ruleGt(
     rowColumnCount(symbolRowIndices, any),
-    rowColumnCount(symbolColumnIndices, any),
+    rowColumnCount(symbolColIndices, any),
   ),
   ruleGt(
-    rowColumnCount(symbolColumnIndices, any),
+    rowColumnCount(symbolColIndices, any),
     rowColumnCount(symbolRowIndices, any),
   ),
   ruleAnd(
-    numberOfSymbolsInRegion('checker1', any),
-    numberOfSymbolsInRegion('checker2', none),
+    f2region2count2b('checker1', any),
+    f2region2count2b('checker2', none),
   ),
   ruleAnd(
-    numberOfSymbolsInRegion('checker1', none),
-    numberOfSymbolsInRegion('checker2', any),
+    f2region2count2b('checker1', none),
+    f2region2count2b('checker2', any),
   ),
-  ruleXor(
-    numberOfSymbolsInRegion('checker1', any),
-    numberOfSymbolsInRegion('checker2', any),
-  ),
-  ruleAnd(
-    numberOfSymbolsInRegion('checker1', any),
-    numberOfSymbolsInRegion('checker2', any),
-  ),
+  ruleXor(f2region2count2b('checker1', any), f2region2count2b('checker2', any)),
+  ruleAnd(f2region2count2b('checker1', any), f2region2count2b('checker2', any)),
   ruleArray(allRowColumnCounts(symbolRowIndices), arrayFirst(any, eq(2))),
-  ruleArray(allRowColumnCounts(symbolColumnIndices), arrayFirst(any, eq(2))),
+  ruleArray(allRowColumnCounts(symbolColIndices), arrayFirst(any, eq(2))),
   ruleArray(
-    allRowColumnCounts(symbolReverseRowIndices),
+    allRowColumnCounts(symbolRowReverseIndices),
     arrayFirst(any, eq(2)),
   ),
   ruleArray(
-    allRowColumnCounts(symbolReverseColumnIndices),
+    allRowColumnCounts(symbolColReverseIndices),
     arrayFirst(any, eq(2)),
   ),
 ];
