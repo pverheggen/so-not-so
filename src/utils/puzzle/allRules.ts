@@ -11,9 +11,16 @@ const regions = {
 };
 
 const symbolRowIndices = [0, 0, 0, 0, 1, 1, 1, 1, 2, 2, 2, 2, 3, 3, 3, 3];
-const symbolColumnIndices = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
-const symbolReverseRowIndices = [...symbolRowIndices].reverse();
-const symbolReverseColumnIndices = [...symbolColumnIndices].reverse();
+const symbolColIndices = [0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3, 0, 1, 2, 3];
+const symbolRowReverseIndices = [...symbolRowIndices].reverse();
+const symbolColReverseIndices = [...symbolColIndices].reverse();
+
+const regionArrays = {
+  row: symbolRowIndices,
+  col: symbolColIndices,
+  rowReverse: symbolRowReverseIndices,
+  colReverse: symbolColReverseIndices,
+};
 
 const arrayCounts = (arr: number[]): number[] =>
   arr.reduce(
@@ -24,7 +31,11 @@ const arrayCounts = (arr: number[]): number[] =>
     [0, 0, 0, 0],
   );
 
+// type FigureFilter = (figure: GridFigureTraits) => GridFigureTraits;
 type RuleCombination = (rule1: FigureRule, rule2: FigureRule) => FigureRule;
+
+type FigureArrayMapper = (figure: GridFigureTraits) => GridFigureTraits[];
+type ArrayNumberArrayRule = (figures: GridFigureTraits[]) => number[];
 
 type NumberComparison = (number: number) => boolean;
 type CreateNumberComparison = (number: number) => NumberComparison;
@@ -44,6 +55,24 @@ const any: NumberComparison = gte(1);
 const none: NumberComparison = eq(0);
 const even: NumberComparison = (element) => element % 2 === 0;
 const odd: NumberComparison = (element) => element % 2 === 1;
+
+const ruleRegionArray = (
+  regionKey: keyof typeof regionArrays,
+): FigureArrayMapper => {
+  const region = regionArrays[regionKey];
+  return (figure) =>
+    figure.reduce(
+      (prev, element, index) => {
+        prev[region[index]].push(element);
+        return prev;
+      },
+      [[], [], [], []] as GridFigureTraits[],
+    );
+};
+
+const toNumberArray = (rule: NumberRule): ArrayNumberArrayRule => {
+  return (figures) => figures.map(rule);
+};
 
 const arrayFirst =
   (
@@ -78,19 +107,22 @@ const ruleGt: NumberRuleCombination = (rule1, rule2) => (figure) =>
   rule1(figure) > rule2(figure);
 
 const numberOfSymbolsInRegion = (
-  region: keyof typeof regions,
+  regionKey: keyof typeof regions,
   comparison: NumberComparison,
 ): FigureRule => {
+  const region = regions[regionKey];
   return (figure) =>
     comparison(
-      figure.filter(
-        (symbol, isymbol) => !!symbol && regions[region].includes(isymbol),
-      ).length,
+      figure.filter((symbol, isymbol) => !!symbol && region.includes(isymbol))
+        .length,
     );
 };
 
+const elementCount: NumberRule = (figure) =>
+  figure.filter((symbol) => !!symbol).length;
+
 const numberOfSymbols = (comparison: NumberComparison): FigureRule => {
-  return (figure) => comparison(figure.filter((symbol) => !!symbol).length);
+  return (figure) => comparison(elementCount(figure));
 };
 
 const allRowColumnCounts = (rowColumnIndices: number[]): NumberArrayRule => {
@@ -125,7 +157,24 @@ const rowColumnCompare = (
     );
 };
 
+const rowColumnCompareNew = (
+  regionKey: keyof typeof regionArrays,
+  elementComparison: NumberComparison,
+  rowColumnComparison: NumberComparison,
+): FigureRule => {
+  return (figure) => {
+    const elementCounts = toNumberArray(elementCount)(
+      ruleRegionArray(regionKey)(figure),
+    );
+    const rowColumnCount = elementCounts
+      .map(elementComparison)
+      .filter((element) => element).length;
+    return rowColumnComparison(rowColumnCount);
+  };
+};
+
 export const allRules: FigureRule[] = [
+  /*
   numberOfSymbols(even),
   numberOfSymbols(odd),
   numberOfSymbols(eq(1)),
@@ -145,40 +194,42 @@ export const allRules: FigureRule[] = [
   numberOfSymbolsInRegion('edges', odd),
   rowColumnCompare(symbolRowIndices, eq(2), any),
   rowColumnCompare(symbolRowIndices, eq(3), any),
+  */
   rowColumnCompare(symbolRowIndices, eq(4), any),
   rowColumnCompare(symbolRowIndices, any, eq(1)),
+  /*
   rowColumnCompare(symbolRowIndices, any, eq(2)),
   rowColumnCompare(symbolRowIndices, any, eq(3)),
   rowColumnCompare(symbolRowIndices, any, gte(3)),
-  rowColumnCompare(symbolColumnIndices, eq(2), any),
-  rowColumnCompare(symbolColumnIndices, eq(3), any),
-  rowColumnCompare(symbolColumnIndices, eq(4), any),
-  rowColumnCompare(symbolColumnIndices, any, eq(1)),
-  rowColumnCompare(symbolColumnIndices, any, eq(2)),
-  rowColumnCompare(symbolColumnIndices, any, eq(3)),
-  rowColumnCompare(symbolColumnIndices, any, gte(3)),
+  rowColumnCompare(symbolColIndices, eq(2), any),
+  rowColumnCompare(symbolColIndices, eq(3), any),
+  rowColumnCompare(symbolColIndices, eq(4), any),
+  rowColumnCompare(symbolColIndices, any, eq(1)),
+  rowColumnCompare(symbolColIndices, any, eq(2)),
+  rowColumnCompare(symbolColIndices, any, eq(3)),
+  rowColumnCompare(symbolColIndices, any, gte(3)),
   ruleAnd(
     rowColumnCompare(symbolRowIndices, eq(2), any),
-    rowColumnCompare(symbolColumnIndices, eq(2), any),
+    rowColumnCompare(symbolColIndices, eq(2), any),
   ),
   ruleNor(
     rowColumnCompare(symbolRowIndices, gte(3), any),
-    rowColumnCompare(symbolColumnIndices, gte(3), any),
+    rowColumnCompare(symbolColIndices, gte(3), any),
   ),
   ruleNor(
     rowColumnCompare(symbolRowIndices, gte(4), any),
-    rowColumnCompare(symbolColumnIndices, gte(4), any),
+    rowColumnCompare(symbolColIndices, gte(4), any),
   ),
   ruleEq(
     rowColumnCount(symbolRowIndices, any),
-    rowColumnCount(symbolColumnIndices, any),
+    rowColumnCount(symbolColIndices, any),
   ),
   ruleGt(
     rowColumnCount(symbolRowIndices, any),
-    rowColumnCount(symbolColumnIndices, any),
+    rowColumnCount(symbolColIndices, any),
   ),
   ruleGt(
-    rowColumnCount(symbolColumnIndices, any),
+    rowColumnCount(symbolColIndices, any),
     rowColumnCount(symbolRowIndices, any),
   ),
   ruleAnd(
@@ -198,13 +249,14 @@ export const allRules: FigureRule[] = [
     numberOfSymbolsInRegion('checker2', any),
   ),
   ruleArray(allRowColumnCounts(symbolRowIndices), arrayFirst(any, eq(2))),
-  ruleArray(allRowColumnCounts(symbolColumnIndices), arrayFirst(any, eq(2))),
+  ruleArray(allRowColumnCounts(symbolColIndices), arrayFirst(any, eq(2))),
   ruleArray(
-    allRowColumnCounts(symbolReverseRowIndices),
+    allRowColumnCounts(symbolRowReverseIndices),
     arrayFirst(any, eq(2)),
   ),
   ruleArray(
-    allRowColumnCounts(symbolReverseColumnIndices),
+    allRowColumnCounts(symbolColReverseIndices),
     arrayFirst(any, eq(2)),
   ),
+  */
 ];
