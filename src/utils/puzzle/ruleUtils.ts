@@ -15,3 +15,9 @@ type ChainFunction = {
 export const chain: ChainFunction = (...fns: any[]) => {
   return (a: any) => fns.reduce((prev, fn) => fn(prev), a);
 };
+
+export const map = <A, B>(mapper: Fn<A, B>): Fn<A[], B[]> => {
+  return (a) => a.map(mapper);
+};
+
+export const count = (array: any[]): number => array.filter((a) => !!a).length;

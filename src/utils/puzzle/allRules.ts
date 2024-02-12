@@ -1,5 +1,5 @@
 import { FigureRule, GridFigureTraits } from 'types';
-import { chain } from './ruleUtils';
+import { chain, count, map } from './ruleUtils';
 
 const regions = {
   center: [5, 6, 9, 10],
@@ -23,16 +23,11 @@ const regionArrays = {
   colReverse: symbolColReverseIndices,
 };
 
-const arrayCounts = (arr: number[]): number[] =>
-  arr.reduce(
-    (prev, element) => {
-      prev[element] = prev[element] + 1;
-      return prev;
-    },
-    [0, 0, 0, 0],
-  );
+type RegionKey = keyof typeof regions;
+type RegionArrayKey = keyof typeof regionArrays;
 
 type FigureFilter = (figure: GridFigureTraits) => GridFigureTraits;
+type FigureArrayMapper = (figure: GridFigureTraits) => GridFigureTraits[];
 type RuleCombination = (rule1: FigureRule, rule2: FigureRule) => FigureRule;
 
 type NumberComparison = (number: number) => boolean;
@@ -53,6 +48,18 @@ const any: NumberComparison = gte(1);
 const none: NumberComparison = eq(0);
 const even: NumberComparison = (element) => element % 2 === 0;
 const odd: NumberComparison = (element) => element % 2 === 1;
+
+const regionArray = (regionArrayKey: RegionArrayKey): FigureArrayMapper => {
+  const region = regionArrays[regionArrayKey];
+  return (figure) =>
+    figure.reduce(
+      (prev, element, index) => {
+        prev[region[index]].push(element);
+        return prev;
+      },
+      [[], [], [], []] as GridFigureTraits[],
+    );
+};
 
 const arrayFirst =
   (
@@ -91,123 +98,69 @@ const region = (regionKey: keyof typeof regions): FigureFilter => {
   return (figure) => region.map((ifigure) => figure[ifigure]);
 };
 
-const count = (figure: GridFigureTraits): number =>
-  figure.filter((symbol) => !!symbol).length;
+const f_c_b = (c_b: NumberComparison): FigureRule => chain(count, c_b);
 
-const f2count2b = (comparison: NumberComparison): FigureRule =>
-  chain(count, comparison);
+const f_r_c_b = (rKey: RegionKey, c_b: NumberComparison): FigureRule =>
+  chain(region(rKey), count, c_b);
 
-const f2region2count2b = (
-  regionKey: keyof typeof regions,
-  comparison: NumberComparison,
-): FigureRule => chain(region(regionKey), count, comparison);
+const f_ra_ca = (raKey: RegionArrayKey): NumberArrayRule =>
+  chain(regionArray(raKey), map(count));
 
-const allRowColumnCounts = (rowColumnIndices: number[]): NumberArrayRule => {
-  return (figure) => {
-    const indicesWithSymbols = figure
-      .map((symbol, isymbol) => (symbol ? isymbol : -1))
-      .filter((symbol) => symbol >= 0);
-    const rowColumnWithSymbols = indicesWithSymbols.map(
-      (i) => rowColumnIndices[i],
-    );
-    return arrayCounts(rowColumnWithSymbols);
-  };
-};
+const f_ra_ca_c = (
+  raKey: RegionArrayKey,
+  cSymbol_b: NumberComparison,
+): NumberRule => chain(f_ra_ca(raKey), map(cSymbol_b), count);
 
-const rowColumnCount = (
-  rowColumnIndices: number[],
-  elementComparison: NumberComparison,
-): NumberRule => {
-  return (figure) =>
-    allRowColumnCounts(rowColumnIndices)(figure).filter(elementComparison)
-      .length;
-};
-
-const rowColumnCompare = (
-  rowColumnIndices: number[],
-  elementComparison: NumberComparison,
-  rowColumnComparison: NumberComparison,
-): FigureRule => {
-  return (figure) =>
-    rowColumnComparison(
-      rowColumnCount(rowColumnIndices, elementComparison)(figure),
-    );
-};
+const f_ra_ca_c_b = (
+  raKey: RegionArrayKey,
+  cSymbol_b: NumberComparison,
+  cRegion_b: NumberComparison,
+): FigureRule => chain(f_ra_ca_c(raKey, cSymbol_b), cRegion_b);
 
 export const allRules: FigureRule[] = [
-  f2count2b(even),
-  f2count2b(odd),
-  f2count2b(eq(1)),
-  f2count2b(eq(1)),
-  f2count2b(eq(1)),
-  f2count2b(eq(1)),
-  f2count2b(eq(1)),
-  f2count2b(lte(2)),
-  f2count2b(gte(4)),
-  f2count2b(gte(5)),
-  f2region2count2b('center', eq(1)),
-  f2region2count2b('leftTopDiag', eq(3)),
-  f2region2count2b('rightTopDiag', eq(3)),
-  f2region2count2b('corners', eq(1)),
-  f2region2count2b('edges', eq(2)),
-  f2region2count2b('edges', even),
-  f2region2count2b('edges', odd),
-  rowColumnCompare(symbolRowIndices, eq(2), any),
-  rowColumnCompare(symbolRowIndices, eq(3), any),
-  rowColumnCompare(symbolRowIndices, eq(4), any),
-  rowColumnCompare(symbolRowIndices, any, eq(1)),
-  rowColumnCompare(symbolRowIndices, any, eq(2)),
-  rowColumnCompare(symbolRowIndices, any, eq(3)),
-  rowColumnCompare(symbolRowIndices, any, gte(3)),
-  rowColumnCompare(symbolColIndices, eq(2), any),
-  rowColumnCompare(symbolColIndices, eq(3), any),
-  rowColumnCompare(symbolColIndices, eq(4), any),
-  rowColumnCompare(symbolColIndices, any, eq(1)),
-  rowColumnCompare(symbolColIndices, any, eq(2)),
-  rowColumnCompare(symbolColIndices, any, eq(3)),
-  rowColumnCompare(symbolColIndices, any, gte(3)),
-  ruleAnd(
-    rowColumnCompare(symbolRowIndices, eq(2), any),
-    rowColumnCompare(symbolColIndices, eq(2), any),
-  ),
-  ruleNor(
-    rowColumnCompare(symbolRowIndices, gte(3), any),
-    rowColumnCompare(symbolColIndices, gte(3), any),
-  ),
-  ruleNor(
-    rowColumnCompare(symbolRowIndices, gte(4), any),
-    rowColumnCompare(symbolColIndices, gte(4), any),
-  ),
-  ruleEq(
-    rowColumnCount(symbolRowIndices, any),
-    rowColumnCount(symbolColIndices, any),
-  ),
-  ruleGt(
-    rowColumnCount(symbolRowIndices, any),
-    rowColumnCount(symbolColIndices, any),
-  ),
-  ruleGt(
-    rowColumnCount(symbolColIndices, any),
-    rowColumnCount(symbolRowIndices, any),
-  ),
-  ruleAnd(
-    f2region2count2b('checker1', any),
-    f2region2count2b('checker2', none),
-  ),
-  ruleAnd(
-    f2region2count2b('checker1', none),
-    f2region2count2b('checker2', any),
-  ),
-  ruleXor(f2region2count2b('checker1', any), f2region2count2b('checker2', any)),
-  ruleAnd(f2region2count2b('checker1', any), f2region2count2b('checker2', any)),
-  ruleArray(allRowColumnCounts(symbolRowIndices), arrayFirst(any, eq(2))),
-  ruleArray(allRowColumnCounts(symbolColIndices), arrayFirst(any, eq(2))),
-  ruleArray(
-    allRowColumnCounts(symbolRowReverseIndices),
-    arrayFirst(any, eq(2)),
-  ),
-  ruleArray(
-    allRowColumnCounts(symbolColReverseIndices),
-    arrayFirst(any, eq(2)),
-  ),
+  f_c_b(even),
+  f_c_b(odd),
+  f_c_b(eq(1)),
+  f_c_b(eq(1)),
+  f_c_b(eq(1)),
+  f_c_b(eq(1)),
+  f_c_b(eq(1)),
+  f_c_b(lte(2)),
+  f_c_b(gte(4)),
+  f_c_b(gte(5)),
+  f_r_c_b('center', eq(1)),
+  f_r_c_b('leftTopDiag', eq(3)),
+  f_r_c_b('rightTopDiag', eq(3)),
+  f_r_c_b('corners', eq(1)),
+  f_r_c_b('edges', eq(2)),
+  f_r_c_b('edges', even),
+  f_r_c_b('edges', odd),
+  f_ra_ca_c_b('row', eq(2), any),
+  f_ra_ca_c_b('row', eq(3), any),
+  f_ra_ca_c_b('row', eq(4), any),
+  f_ra_ca_c_b('row', any, eq(1)),
+  f_ra_ca_c_b('row', any, eq(2)),
+  f_ra_ca_c_b('row', any, eq(3)),
+  f_ra_ca_c_b('row', any, gte(3)),
+  f_ra_ca_c_b('col', eq(2), any),
+  f_ra_ca_c_b('col', eq(3), any),
+  f_ra_ca_c_b('col', eq(4), any),
+  f_ra_ca_c_b('col', any, eq(1)),
+  f_ra_ca_c_b('col', any, eq(2)),
+  f_ra_ca_c_b('col', any, eq(3)),
+  f_ra_ca_c_b('col', any, gte(3)),
+  ruleAnd(f_ra_ca_c_b('row', eq(2), any), f_ra_ca_c_b('col', eq(2), any)),
+  ruleNor(f_ra_ca_c_b('row', gte(3), any), f_ra_ca_c_b('col', gte(3), any)),
+  ruleNor(f_ra_ca_c_b('row', gte(4), any), f_ra_ca_c_b('col', gte(4), any)),
+  ruleEq(f_ra_ca_c('row', any), f_ra_ca_c('col', any)),
+  ruleGt(f_ra_ca_c('row', any), f_ra_ca_c('col', any)),
+  ruleGt(f_ra_ca_c('col', any), f_ra_ca_c('row', any)),
+  ruleAnd(f_r_c_b('checker1', any), f_r_c_b('checker2', none)),
+  ruleAnd(f_r_c_b('checker1', none), f_r_c_b('checker2', any)),
+  ruleXor(f_r_c_b('checker1', any), f_r_c_b('checker2', any)),
+  ruleAnd(f_r_c_b('checker1', any), f_r_c_b('checker2', any)),
+  ruleArray(f_ra_ca('row'), arrayFirst(any, eq(2))),
+  ruleArray(f_ra_ca('col'), arrayFirst(any, eq(2))),
+  ruleArray(f_ra_ca('rowReverse'), arrayFirst(any, eq(2))),
+  ruleArray(f_ra_ca('colReverse'), arrayFirst(any, eq(2))),
 ];
