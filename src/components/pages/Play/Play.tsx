@@ -32,8 +32,6 @@ const Play = (): JSX.Element => {
     if (currentRowAnimations.isPlaying) {
       return;
     }
-    const currentFigure = currentRow.figures[figureIndex];
-    const pass = rule(currentFigure.traits);
     if (figureIndex !== passIndex) {
       setScore(0);
       return currentRowAnimations.play(
