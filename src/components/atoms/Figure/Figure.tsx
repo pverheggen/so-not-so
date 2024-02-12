@@ -8,7 +8,7 @@ const Figure = ({
   pass,
   s,
   selectable,
-}: IFigureProps): JSX.Element => {
+}: IFigureProps) => {
   return (
     <button
       type="button"

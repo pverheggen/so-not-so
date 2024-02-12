@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState } from 'preact/hooks';
 import { AnimationLike, IUseAnimationReturn } from 'types';
 import { IStyleProps } from 'utils';
 import { useTimeout } from './useTimeout';

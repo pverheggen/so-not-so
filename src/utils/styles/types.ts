@@ -1,4 +1,5 @@
 import classNames from 'classnames';
+import { JSX } from 'preact';
 
 export type IStyleVars = { [key: string]: string | number };
 
@@ -9,5 +10,5 @@ export interface IStyleProps {
 
 export interface IStyle {
   className?: string;
-  style?: React.CSSProperties;
+  style?: JSX.CSSProperties;
 }

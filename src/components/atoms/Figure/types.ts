@@ -1,7 +1,8 @@
+import type { ComponentChildren } from 'preact';
 import { IStyleProps } from 'utils/styles/types';
 
 export interface IFigureProps {
-  children?: React.ReactNode;
+  children?: ComponentChildren;
   s?: IStyleProps;
   onClick?: () => void;
   pass?: boolean;

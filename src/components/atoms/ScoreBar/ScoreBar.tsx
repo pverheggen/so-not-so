@@ -2,7 +2,7 @@ import classes from './ScoreBar.module.css';
 import { IScoreBarProps } from './types';
 import { createStyle } from 'utils';
 
-const ScoreBar = ({ maxScore, score }: IScoreBarProps): JSX.Element => {
+const ScoreBar = ({ maxScore, score }: IScoreBarProps) => {
   const segments = new Array(maxScore).fill(0).map((_, i) => i);
   return (
     <div {...createStyle(classes.bar)}>

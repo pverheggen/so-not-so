@@ -1,11 +1,12 @@
+
+import { useState } from 'preact/hooks';
 import { FigureRow, ScoreBar } from 'components';
-import { useState } from 'react';
 import classes from './Play.module.css';
 import { FigureRowData } from 'types';
 import { createStyle, puzzleUtils } from 'utils';
 import { useAnimations } from 'hooks';
 
-const Play = (): JSX.Element => {
+const Play = () => {
   const [rule] = useState(() => puzzleUtils.createRule());
   const [currentRow, setCurrentRow] = useState(() =>
     puzzleUtils.createFigureRow(3, rule),
@@ -23,9 +24,9 @@ const Play = (): JSX.Element => {
   const { figures, passIndex } = currentRow;
   const styledFigures = currentRowAnimations.styles
     ? figures.map((figure, ifigure) => ({
-        ...figure,
-        s: currentRowAnimations.styles[ifigure],
-      }))
+      ...figure,
+      s: currentRowAnimations.styles[ifigure],
+    }))
     : figures;
 
   const onClick = async (figureIndex: number) => {

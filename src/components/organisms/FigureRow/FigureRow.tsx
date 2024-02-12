@@ -9,7 +9,7 @@ const FigureRow = ({
   selectable,
   s,
   figures,
-}: IFigureRowProps): JSX.Element => {
+}: IFigureRowProps) => {
   return (
     <div {...createStyle(classes.row, s)}>
       {figures?.map((figure, ifigure) => (

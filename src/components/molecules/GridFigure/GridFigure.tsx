@@ -9,7 +9,7 @@ const GridFigure = ({
   pass,
   selectable,
   figure,
-}: IGridFigureProps): JSX.Element => {
+}: IGridFigureProps) => {
   const { traits, s } = figure;
   const createSymbol = (symbol: SymbolTraits, isymbol: number) => {
     if (!symbol) {
