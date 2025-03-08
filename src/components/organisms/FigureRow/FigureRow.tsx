@@ -9,6 +9,7 @@ const FigureRow = ({
   selectable,
   s,
   figures,
+  figureStyles,
 }: IFigureRowProps) => {
   return (
     <div {...createStyle(classes.row, s)}>
@@ -21,6 +22,7 @@ const FigureRow = ({
           figure={figure}
           pass={ifigure === passIndex}
           selectable={selectable}
+          s={figureStyles?.[ifigure]}
         />
       ))}
     </div>

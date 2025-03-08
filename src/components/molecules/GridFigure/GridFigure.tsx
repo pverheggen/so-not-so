@@ -9,8 +9,9 @@ const GridFigure = ({
   pass,
   selectable,
   figure,
+  s
 }: IGridFigureProps) => {
-  const { traits, s } = figure;
+  const { traits } = figure;
   const createSymbol = (symbol: SymbolTraits, isymbol: number) => {
     if (!symbol) {
       return undefined;

@@ -1,5 +1,3 @@
-import { IStyleProps } from 'utils';
-
 export type Color = 'light' | 'medium' | 'dark';
 export type Shape = 'circle' | 'square' | 'triangle';
 
@@ -17,13 +15,14 @@ export type GridFigureTraits = SymbolTraits[];
 
 export interface GridFigureData {
   traits: GridFigureTraits;
-  s?: IStyleProps;
 }
 
-export interface FigureRowData {
+export interface FigureRowDataTyped<T> {
   key: number;
   passIndex: number;
-  figures: GridFigureData[];
+  figures: T[];
 }
+
+export type FigureRowData = FigureRowDataTyped<GridFigureData>;
 
 export type FigureRule = (figure: GridFigureTraits) => boolean;

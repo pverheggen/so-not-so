@@ -1,4 +1,3 @@
-
 import { useState } from 'preact/hooks';
 import { FigureRow, ScoreBar } from 'components';
 import classes from './Play.module.css';
@@ -22,12 +21,6 @@ const Play = () => {
   const maxScore = 8;
   const isWin = score >= maxScore;
   const { figures, passIndex } = currentRow;
-  const styledFigures = currentRowAnimations.styles
-    ? figures.map((figure, ifigure) => ({
-      ...figure,
-      s: currentRowAnimations.styles[ifigure],
-    }))
-    : figures;
 
   const onClick = async (figureIndex: number) => {
     if (currentRowAnimations.isPlaying) {
@@ -54,7 +47,12 @@ const Play = () => {
       <div {...createStyle(classes.header)}>
         {isWin && <span {...createStyle(classes.win)}>You Win</span>}
         {!isWin && (
-          <FigureRow selectable figures={styledFigures} onClick={onClick} />
+          <FigureRow
+            selectable
+            figures={figures}
+            figureStyles={currentRowAnimations.styles}
+            onClick={onClick}
+          />
         )}
         <ScoreBar maxScore={maxScore} score={score} />
       </div>

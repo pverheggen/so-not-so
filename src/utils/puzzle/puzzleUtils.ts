@@ -1,4 +1,9 @@
-import { FigureRowData, FigureRule, GridFigureTraits } from 'types';
+import {
+  FigureRowData,
+  FigureRule,
+  GridFigureData,
+  GridFigureTraits,
+} from 'types';
 import { randomInt } from 'utils';
 import { allRules } from './allRules';
 
@@ -37,12 +42,13 @@ export const createFigureRow = (
   }
   const passIndex = randomInt(0, 3);
   const [figureToSplice] = passes;
-  const figures = [...fails];
-  figures.splice(passIndex, 0, figureToSplice);
+  const figureTraits = [...fails];
+  figureTraits.splice(passIndex, 0, figureToSplice);
+  const figures: GridFigureData[] = figureTraits.map((traits) => ({ traits }));
   return {
     key,
     passIndex,
-    figures: figures.map((traits) => ({ traits })),
+    figures,
   };
 };
 
