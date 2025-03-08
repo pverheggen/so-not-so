@@ -1,5 +1,4 @@
 import { Play } from 'components';
-import 'App.css';
 
 function App() {
   return (
