@@ -1,8 +1,8 @@
-import { GridFigureData } from 'types';
+import { FigureData } from 'types';
 import { IStyleProps } from 'utils';
 
 export interface IFigureRowProps {
-  figures?: GridFigureData[];
+  figures?: FigureData[];
   figureStyles?: (IStyleProps | undefined)[];
   onClick?: (figureIndex: number) => void;
   passIndex?: number;

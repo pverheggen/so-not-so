@@ -14,15 +14,25 @@ export type SymbolTraits = Traits | undefined;
 export type GridFigureTraits = SymbolTraits[];
 
 export interface GridFigureData {
+  type: 'grid';
   traits: GridFigureTraits;
 }
 
-export interface FigureRowDataTyped<T> {
-  key: number;
-  passIndex: number;
-  figures: T[];
+export type SvgPathSegment =
+  | ['M', x: number, y: number]
+  | ['l', dx: number, dy: number];
+
+export interface SvgFigureData {
+  type: 'svg';
+  path: SvgPathSegment[];
 }
 
-export type FigureRowData = FigureRowDataTyped<GridFigureData>;
+export type FigureData = GridFigureData | SvgFigureData;
+
+export type FigureRowData = {
+  key: number;
+  passIndex: number;
+  figures: FigureData[];
+};
 
 export type FigureRule = (figure: GridFigureTraits) => boolean;

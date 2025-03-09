@@ -3,6 +3,8 @@ import {
   FigureRule,
   GridFigureData,
   GridFigureTraits,
+  SvgFigureData,
+  SvgPathSegment,
 } from 'types';
 import { randomInt } from 'utils';
 import { allRules } from './allRules';
@@ -44,13 +46,38 @@ export const createFigureRow = (
   const [figureToSplice] = passes;
   const figureTraits = [...fails];
   figureTraits.splice(passIndex, 0, figureToSplice);
-  const figures: GridFigureData[] = figureTraits.map((traits) => ({ traits }));
+  const figures: GridFigureData[] = figureTraits.map((traits) => ({
+    type: 'grid',
+    traits,
+  }));
   return {
     key,
     passIndex,
-    figures,
+    figures: figures.map(gridToSvg),
   };
 };
+
+const gridToSvg = ({ traits }: GridFigureData): SvgFigureData => ({
+  type: 'svg',
+  path: traits
+    .map((trait, itrait): SvgPathSegment[] | undefined => {
+      if (!trait) {
+        return undefined;
+      }
+      const columnCount = 4;
+      const row = Math.floor(itrait / columnCount);
+      const col = itrait % columnCount;
+      return [
+        ['M', 0.5 + row * 3, 0.5 + col * 3],
+        ['l', 2, 0],
+        ['l', 0, 2],
+        ['l', -2, 0],
+        ['l', 0, -2],
+      ];
+    })
+    .filter((segment) => !!segment)
+    .flat(),
+});
 
 export const sortRow = (row: FigureRowData): FigureRowData => {
   const { figures: prevFigures, passIndex } = row;
@@ -61,5 +88,5 @@ export const sortRow = (row: FigureRowData): FigureRowData => {
     ...row,
     passIndex: 0,
     figures,
-  };
+  } as FigureRowData;
 };
