@@ -2,6 +2,7 @@
   height: 22.5rem;
   width: 22.5rem;
   border: 2px solid #eee;
+  padding: 0;
   box-sizing: border-box;
   background-color: unset;
   appearance: unset;
@@ -12,7 +13,8 @@
     cursor: default;
     border-color: #444;
   }
-  &.pass, &.pass:disabled {
+  &.pass,
+  &.pass:disabled {
     border-color: #07d34e;
   }
 }
