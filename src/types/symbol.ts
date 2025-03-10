@@ -18,9 +18,7 @@ export interface GridFigureData {
   traits: GridFigureTraits;
 }
 
-export type SvgPathSegment =
-  | ['M', x: number, y: number]
-  | ['l', dx: number, dy: number];
+export type SvgPathSegment = string;
 
 export interface SvgFigureData {
   type: 'svg';

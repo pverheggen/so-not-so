@@ -6,13 +6,11 @@ import {
   SvgFigureData,
   SvgPathSegment,
 } from 'types';
-import { randomInt } from 'utils';
+import { randomElement, randomInt } from 'utils';
 import { allRules } from './allRules';
+import allSymbols from './allSymbols';
 
-export const createRule = (): FigureRule => {
-  const ruleIndex = randomInt(0, allRules.length - 1);
-  return allRules[ruleIndex];
-};
+export const createRule = (): FigureRule => randomElement(allRules);
 
 export const createFigureSymbols = (): GridFigureTraits => {
   return Array(16)
@@ -60,23 +58,17 @@ export const createFigureRow = (
 const gridToSvg = ({ traits }: GridFigureData): SvgFigureData => ({
   type: 'svg',
   path: traits
-    .map((trait, itrait): SvgPathSegment[] | undefined => {
+    .map((trait, itrait) => {
       if (!trait) {
         return undefined;
       }
       const columnCount = 4;
       const row = Math.floor(itrait / columnCount);
       const col = itrait % columnCount;
-      return [
-        ['M', 0.5 + row * 3, 0.5 + col * 3],
-        ['l', 2, 0],
-        ['l', 0, 2],
-        ['l', -2, 0],
-        ['l', 0, -2],
-      ];
+      const symbol = randomElement(allSymbols);
+      return `M${0.5 + row * 3} ${0.5 + col * 3} ${symbol}`;
     })
-    .filter((segment) => !!segment)
-    .flat(),
+    .filter((segment): segment is SvgPathSegment => !!segment),
 });
 
 export const sortRow = (row: FigureRowData): FigureRowData => {
