@@ -1,5 +1,14 @@
-import { FigureRule, GridFigureTraits } from 'types';
-import { chain, count, map } from './ruleUtils';
+import {
+  FigureGenerator,
+  FigureRule,
+  GridFigureData,
+  GridFigureTraits,
+  SvgFigureData,
+  SvgPathSegment,
+} from 'types';
+import { chain, combine, count, map } from './ruleUtils';
+import { random, randomElement } from 'utils/random';
+import allSymbols from './allSymbols';
 
 const regions = {
   center: [5, 6, 9, 10],
@@ -120,7 +129,44 @@ const f_ra_ca_c_b = (
   cRegion_b: NumberComparison,
 ): FigureRule => chain(f_ra_ca_c(raKey, cSymbol_b), cRegion_b);
 
-export const allRules: FigureRule[] = [
+const createFigureSymbols = (): GridFigureTraits => {
+  let traits: GridFigureTraits;
+  do {
+    traits = Array(16)
+      .fill(undefined)
+      .map(() =>
+        random() > 0.8 ? { color: 'light', shape: 'square' } : undefined,
+      );
+  } while (traits.every((symbol) => symbol === undefined));
+  return traits;
+};
+
+const generateFigure: FigureGenerator<GridFigureTraits> = () => {
+  const traits = createFigureSymbols();
+  const svg = gridToSvg({ type: 'grid', traits });
+  return {
+    svg,
+    data: traits,
+  };
+};
+
+const gridToSvg = ({ traits }: GridFigureData): SvgFigureData => ({
+  type: 'svg',
+  path: traits
+    .map((trait, itrait) => {
+      if (!trait) {
+        return undefined;
+      }
+      const columnCount = 4;
+      const row = Math.floor(itrait / columnCount);
+      const col = itrait % columnCount;
+      const symbol = randomElement(allSymbols);
+      return `M${0.5 + row * 3} ${0.5 + col * 3} ${symbol}`;
+    })
+    .filter((segment): segment is SvgPathSegment => !!segment),
+});
+
+const allRules: FigureRule[] = [
   f_c_b(even),
   f_c_b(odd),
   f_c_b(eq(1)),
@@ -172,3 +218,5 @@ export const allRules: FigureRule[] = [
   f_ra_ca_b('rowReverse', ordered),
   f_ra_ca_b('colReverse', ordered),
 ];
+
+export const allPuzzles = allRules.map((rule) => combine(generateFigure, rule));

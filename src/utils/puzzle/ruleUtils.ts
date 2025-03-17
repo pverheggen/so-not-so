@@ -1,3 +1,5 @@
+import { FigureGenerator, Rule, PuzzleGenerator } from 'types';
+
 /* eslint-disable @typescript-eslint/no-explicit-any */
 type Fn<A, B> = (a: A) => B;
 
@@ -21,3 +23,11 @@ export const map = <A, B>(mapper: Fn<A, B>): Fn<A[], B[]> => {
 };
 
 export const count = (array: any[]): number => array.filter((a) => !!a).length;
+
+export const combine =
+  <T>(generator: FigureGenerator<T>, rule: Rule<T>): PuzzleGenerator =>
+  () => {
+    const { svg, data } = generator();
+    const pass = rule(data);
+    return { svg, pass };
+  };

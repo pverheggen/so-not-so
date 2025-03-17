@@ -6,14 +6,14 @@ import { createStyle, puzzleUtils } from 'utils';
 import { useAnimations } from 'hooks';
 
 const Play = () => {
-  const [rule] = useState(() => puzzleUtils.createRule());
+  const [puzzle] = useState(() => puzzleUtils.createPuzzle());
   const [currentRow, setCurrentRow] = useState(() =>
-    puzzleUtils.createFigureRow(3, rule),
+    puzzleUtils.createFigureRow(3, puzzle),
   );
   const [pastRows, setPastRows] = useState<FigureRowData[]>(() => [
-    puzzleUtils.sortRow(puzzleUtils.createFigureRow(2, rule)),
-    puzzleUtils.sortRow(puzzleUtils.createFigureRow(1, rule)),
-    puzzleUtils.sortRow(puzzleUtils.createFigureRow(0, rule)),
+    puzzleUtils.sortRow(puzzleUtils.createFigureRow(2, puzzle)),
+    puzzleUtils.sortRow(puzzleUtils.createFigureRow(1, puzzle)),
+    puzzleUtils.sortRow(puzzleUtils.createFigureRow(0, puzzle)),
   ]);
   const [score, setScore] = useState(0);
   const currentRowAnimations = useAnimations();
@@ -38,7 +38,7 @@ const Play = () => {
         ),
       );
     }
-    setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, rule));
+    setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, puzzle));
     setPastRows([puzzleUtils.sortRow(currentRow), ...pastRows]);
     setScore((score) => score + 1);
   };

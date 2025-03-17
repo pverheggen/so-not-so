@@ -33,4 +33,20 @@ export type FigureRowData = {
   figures: FigureData[];
 };
 
-export type FigureRule = (figure: GridFigureTraits) => boolean;
+export type Rule<T> = (data: T) => boolean;
+
+export type FigureRule = Rule<GridFigureTraits>;
+
+export interface GeneratedData<T> {
+  svg: SvgFigureData;
+  data: T;
+}
+
+export type FigureGenerator<T> = () => GeneratedData<T>;
+
+export interface PuzzleData {
+  svg: SvgFigureData;
+  pass: boolean;
+}
+
+export type PuzzleGenerator = () => PuzzleData;

@@ -1,5 +1,9 @@
-export const randomInt = (min: number, max: number) =>
-  Math.round(Math.random() * (max - min) + min);
+import Prando from 'prando';
 
-export const randomElement = <T>(arr: T[]): T =>
-  arr[randomInt(0, arr.length - 1)];
+const prando = new Prando(3);
+
+export const random = () => prando.next(0, 1);
+
+export const randomInt = (min: number, max: number) => prando.nextInt(min, max);
+
+export const randomElement = <T>(arr: T[]): T => prando.nextArrayItem(arr);
