@@ -1,9 +1,12 @@
-import { Play } from 'components';
+import { Router } from 'components/Router';
+import { RouterProvider } from 'contexts';
 
 function App() {
   return (
     <div className="app">
-      <Play />
+      <RouterProvider>
+        <Router />
+      </RouterProvider>
     </div>
   );
 }

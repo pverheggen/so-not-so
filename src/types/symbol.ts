@@ -25,7 +25,12 @@ export interface SvgFigureData {
   path: SvgPathSegment[];
 }
 
-export type FigureData = GridFigureData | SvgFigureData;
+export interface TextFigureData {
+  type: 'text';
+  text: string;
+}
+
+export type FigureData = GridFigureData | SvgFigureData | TextFigureData;
 
 export type FigureRowData = {
   key: number;

@@ -1,8 +1,7 @@
-import { GridFigure } from 'components';
+import { GridFigure, SvgFigure, TextFigure } from 'components';
 import classes from './FigureRow.module.css';
 import { IFigureRowProps } from './types';
 import { createStyle } from 'utils';
-import { SvgFigure } from 'components/molecules/SvgFigure';
 
 const FigureRow = ({
   onClick,
@@ -28,6 +27,8 @@ const FigureRow = ({
             return <GridFigure key={figure} figure={figure} {...props} />;
           case 'svg':
             return <SvgFigure key={figure} figure={figure} {...props} />;
+          case 'text':
+            return <TextFigure key={figure} figure={figure} {...props} />;
         }
       })}
     </div>

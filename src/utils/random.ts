@@ -1,6 +1,10 @@
 import Prando from 'prando';
 
-const prando = new Prando(3);
+let prando = new Prando();
+
+export const reseed = (seed: number) => {
+  prando = new Prando(seed);
+};
 
 export const random = () => prando.next(0, 1);
 
