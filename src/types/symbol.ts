@@ -1,15 +1,15 @@
-export type Color = 'light' | 'medium' | 'dark';
+export type Style = 'none' | 'vline' | 'hline' | 'point';
 export type Shape = 'circle' | 'square' | 'triangle';
 
-export interface ColorTrait {
-  color: Color;
+export interface StyleTrait {
+  style: Style;
 }
 export interface ShapeTrait {
   shape: Shape;
 }
 
-export type Traits = ColorTrait & ShapeTrait;
-export type TraitPredicate = ColorTrait | ShapeTrait;
+export type Traits = StyleTrait & ShapeTrait;
+export type TraitPredicate = StyleTrait | ShapeTrait;
 export type SymbolTraits = Traits | undefined;
 export type GridFigureTraits = SymbolTraits[];
 
@@ -47,7 +47,13 @@ export interface GeneratedData<T> {
   data: T;
 }
 
-export type FigureGenerator<T> = () => GeneratedData<T>;
+export type FigureGenerator<TProps, TData> = (
+  props: TProps,
+) => GeneratedData<TData>;
+
+export interface SymbolGeneratorProps {
+  randomShape: boolean;
+}
 
 export interface PuzzleData {
   svg: SvgFigureData;

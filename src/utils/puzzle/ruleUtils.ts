@@ -25,9 +25,13 @@ export const map = <A, B>(mapper: Fn<A, B>): Fn<A[], B[]> => {
 export const count = (array: any[]): number => array.filter((a) => !!a).length;
 
 export const combine =
-  <T>(generator: FigureGenerator<T>, rule: Rule<T>): PuzzleGenerator =>
+  <TProps, TData>(
+    generator: FigureGenerator<TProps, TData>,
+    props: TProps,
+    rule: Rule<TData>,
+  ): PuzzleGenerator =>
   () => {
-    const { svg, data } = generator();
+    const { svg, data } = generator(props);
     const pass = rule(data);
     return { svg, pass };
   };

@@ -3,12 +3,14 @@ import {
   FigureRule,
   GridFigureData,
   GridFigureTraits,
+  Shape,
   SvgFigureData,
   SvgPathSegment,
+  SymbolGeneratorProps,
 } from 'types';
 import { chain, combine, count, map } from './ruleUtils';
 import { random, randomElement } from 'utils/random';
-import allSymbols from './allSymbols';
+import { basicSymbols } from './allSymbols';
 
 const regions = {
   center: [5, 6, 9, 10],
@@ -129,20 +131,30 @@ const f_ra_ca_c_b = (
   cRegion_b: NumberComparison,
 ): FigureRule => chain(f_ra_ca_c(raKey, cSymbol_b), cRegion_b);
 
-const createFigureSymbols = (): GridFigureTraits => {
+const createFigureSymbols = ({
+  randomShape,
+}: SymbolGeneratorProps): GridFigureTraits => {
   let traits: GridFigureTraits;
   do {
     traits = Array(16)
       .fill(undefined)
-      .map(() =>
-        random() > 0.8 ? { color: 'light', shape: 'square' } : undefined,
-      );
+      .map(() => {
+        if (random() < 0.8) {
+          return undefined;
+        }
+        const shapes: Shape[] = ['square', 'circle', 'triangle'];
+        const shape = randomShape ? randomElement(shapes) : 'square';
+        return { style: 'none', shape };
+      });
   } while (traits.every((symbol) => symbol === undefined));
   return traits;
 };
 
-const generateFigure: FigureGenerator<GridFigureTraits> = () => {
-  const traits = createFigureSymbols();
+const generateFigure: FigureGenerator<
+  SymbolGeneratorProps,
+  GridFigureTraits
+> = (props: SymbolGeneratorProps) => {
+  const traits = createFigureSymbols(props);
   const svg = gridToSvg({ type: 'grid', traits });
   return {
     svg,
@@ -160,7 +172,13 @@ const gridToSvg = ({ traits }: GridFigureData): SvgFigureData => ({
       const columnCount = 4;
       const row = Math.floor(itrait / columnCount);
       const col = itrait % columnCount;
-      const symbol = randomElement(allSymbols);
+      const { shape } = trait;
+      let symbol = basicSymbols.square;
+      if (shape === 'circle') {
+        symbol = basicSymbols.circle;
+      } else if (shape === 'triangle') {
+        symbol = basicSymbols.triangle;
+      }
       return `M${0.5 + row * 3} ${0.5 + col * 3} ${symbol}`;
     })
     .filter((segment): segment is SvgPathSegment => !!segment),
@@ -219,4 +237,6 @@ const allRules: FigureRule[] = [
   f_ra_ca_b('colReverse', ordered),
 ];
 
-export const allPuzzles = allRules.map((rule) => combine(generateFigure, rule));
+export const allPuzzles = allRules.map((rule) =>
+  combine(generateFigure, { randomShape: random() > 0.5 }, rule),
+);

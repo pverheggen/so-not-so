@@ -1,16 +1,8 @@
-import { FigureGenerator, FigureRowData, PuzzleGenerator, Rule } from 'types';
+import { FigureRowData, PuzzleGenerator } from 'types';
 import { randomElement, randomInt } from 'utils';
 import { allPuzzles } from './allRules';
 
 export const createPuzzle = (): PuzzleGenerator => randomElement(allPuzzles);
-
-export const combine =
-  <T>(generator: FigureGenerator<T>, rule: Rule<T>): PuzzleGenerator =>
-  () => {
-    const { svg, data } = generator();
-    const pass = rule(data);
-    return { svg, pass };
-  };
 
 export const createFigureRow = (
   key: number,
