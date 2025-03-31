@@ -131,6 +131,8 @@ const f_ra_ca_c_b = (
   cRegion_b: NumberComparison,
 ): FigureRule => chain(f_ra_ca_c(raKey, cSymbol_b), cRegion_b);
 
+const allShapes: Shape[] = ['square', 'circle', 'triangle'];
+
 const createFigureSymbols = ({
   randomShape,
 }: SymbolGeneratorProps): GridFigureTraits => {
@@ -142,8 +144,7 @@ const createFigureSymbols = ({
         if (random() < 0.8) {
           return undefined;
         }
-        const shapes: Shape[] = ['square', 'circle', 'triangle'];
-        const shape = randomShape ? randomElement(shapes) : 'square';
+        const shape = randomShape ? randomElement(allShapes) : 'square';
         return { style: 'none', shape };
       });
   } while (traits.every((symbol) => symbol === undefined));
@@ -184,7 +185,7 @@ const gridToSvg = ({ traits }: GridFigureData): SvgFigureData => ({
     .filter((segment): segment is SvgPathSegment => !!segment),
 });
 
-const allRules: FigureRule[] = [
+const traitlessRules: FigureRule[] = [
   f_c_b(even),
   f_c_b(odd),
   f_c_b(eq(1)),
@@ -237,6 +238,21 @@ const allRules: FigureRule[] = [
   f_ra_ca_b('colReverse', ordered),
 ];
 
-export const allPuzzles = allRules.map((rule) =>
+export const traitlessPuzzles = traitlessRules.map((rule) =>
   combine(generateFigure, { randomShape: random() > 0.5 }, rule),
 );
+
+const singleShapeRules: ((shape: Shape) => FigureRule)[] = [
+  (shape: Shape) =>
+    chain((array) => array.filter((a) => a?.shape === shape).length, eq(1)),
+];
+
+const singleShapePuzzles = singleShapeRules.map((rule) =>
+  combine(
+    generateFigure,
+    { randomShape: true },
+    rule(randomElement(allShapes)),
+  ),
+);
+
+export const allPuzzles = [...traitlessPuzzles, ...singleShapePuzzles];
