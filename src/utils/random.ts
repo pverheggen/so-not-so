@@ -2,7 +2,7 @@ import Prando from 'prando';
 
 let prando = new Prando();
 
-export const reseed = (seed: number) => {
+export const reseed = (seed?: number) => {
   prando = new Prando(seed);
 };
 

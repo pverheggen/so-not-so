@@ -1,9 +1,12 @@
 import { FigureRowData, PuzzleGenerator } from 'types';
-import { randomElement, randomInt } from 'utils';
-import { traitlessPuzzles } from './allRules';
+import { randomElement, randomInt, reseed } from 'utils';
+import { allPuzzles } from './allRules';
 
-export const createPuzzle = (): PuzzleGenerator =>
-  randomElement(traitlessPuzzles);
+export const createPuzzle = (): PuzzleGenerator => {
+  const puzzle = randomElement(allPuzzles);
+  reseed();
+  return puzzle;
+};
 
 export const createFigureRow = (
   key: number,

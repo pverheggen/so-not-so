@@ -4,8 +4,10 @@ import classes from './Play.module.css';
 import { FigureRowData } from 'types';
 import { createStyle, puzzleUtils } from 'utils';
 import { useAnimations } from 'hooks';
+import { useRouter } from 'contexts';
 
 const Play = () => {
+  const { push } = useRouter();
   const [puzzle] = useState(() => puzzleUtils.createPuzzle());
   const [currentRow, setCurrentRow] = useState(() =>
     puzzleUtils.createFigureRow(3, puzzle),
@@ -45,6 +47,15 @@ const Play = () => {
   return (
     <>
       <div {...createStyle(classes.header)}>
+        <button
+          type="button"
+          {...createStyle(classes.back)}
+          onClick={() => {
+            push('list');
+          }}
+        >
+          Back
+        </button>
         {isWin && <span {...createStyle(classes.win)}>You Win</span>}
         {!isWin && (
           <FigureRow

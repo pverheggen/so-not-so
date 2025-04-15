@@ -19,7 +19,7 @@ const List = () => {
         selectable
         figures={figures}
         onClick={(figureIndex) => {
-          reseed(figureIndex);
+          reseed(figureIndex * 100003);
           push('play');
         }}
         s={{

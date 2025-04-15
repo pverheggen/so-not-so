@@ -9,7 +9,7 @@ import {
   SymbolGeneratorProps,
 } from 'types';
 import { chain, combine, count, map } from './ruleUtils';
-import { random, randomElement } from 'utils/random';
+import { random, randomElement, reseed } from 'utils/random';
 import { basicSymbols } from './allSymbols';
 
 const regions = {
@@ -185,6 +185,8 @@ const gridToSvg = ({ traits }: GridFigureData): SvgFigureData => ({
     .filter((segment): segment is SvgPathSegment => !!segment),
 });
 
+reseed(12345);
+
 const traitlessRules: FigureRule[] = [
   f_c_b(even),
   f_c_b(odd),
@@ -239,12 +241,14 @@ const traitlessRules: FigureRule[] = [
 ];
 
 export const traitlessPuzzles = traitlessRules.map((rule) =>
-  combine(generateFigure, { randomShape: random() > 0.5 }, rule),
+  combine(generateFigure, { randomShape: random() > 0.7 }, rule),
 );
 
+const filterShape = (shape: Shape) => (array: GridFigureTraits) =>
+  array.filter((a) => a?.shape === shape);
+
 const singleShapeRules: ((shape: Shape) => FigureRule)[] = [
-  (shape: Shape) =>
-    chain((array) => array.filter((a) => a?.shape === shape).length, eq(1)),
+  (shape: Shape) => chain(filterShape(shape), count, eq(1)),
 ];
 
 const singleShapePuzzles = singleShapeRules.map((rule) =>
