@@ -1,3 +1,7 @@
+.svg {
+  display: block;
+}
+
 .path {
   stroke: #eee;
   stroke-width: 0.2;

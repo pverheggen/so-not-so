@@ -187,6 +187,13 @@ const gridToSvg = ({ traits }: GridFigureData): SvgFigureData => ({
 
 reseed(12345);
 
+/*
+[
+  2, 2*, 3, 1,
+  0, 
+]
+*/
+
 const traitlessRules: FigureRule[] = [
   f_c_b(even),
   f_c_b(odd),

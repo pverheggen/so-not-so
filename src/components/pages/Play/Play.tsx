@@ -5,6 +5,8 @@ import { FigureRowData } from 'types';
 import { createStyle, puzzleUtils } from 'utils';
 import { useAnimations } from 'hooks';
 import { useRouter } from 'contexts';
+import { PastRowGrid } from 'components/organisms/PastRowGrid';
+import { Button } from 'components/atoms/Button';
 
 const Play = () => {
   const { push } = useRouter();
@@ -47,15 +49,14 @@ const Play = () => {
   return (
     <>
       <div {...createStyle(classes.header)}>
-        <button
-          type="button"
-          {...createStyle(classes.back)}
+        <Button
+          s={{ classNames: classes.back }}
           onClick={() => {
             push('list');
           }}
         >
           Back
-        </button>
+        </Button>
         {isWin && <span {...createStyle(classes.win)}>You Win</span>}
         {!isWin && (
           <FigureRow
@@ -67,14 +68,9 @@ const Play = () => {
         )}
         <ScoreBar maxScore={maxScore} score={score} />
       </div>
-      {pastRows.map(({ key, figures, passIndex }) => (
-        <FigureRow
-          key={key}
-          figures={figures}
-          passIndex={passIndex}
-          s={{ classNames: classes.row }}
-        />
-      ))}
+      <div {...createStyle(classes.body)}>
+        <PastRowGrid pastRows={pastRows} />
+      </div>
     </>
   );
 };
