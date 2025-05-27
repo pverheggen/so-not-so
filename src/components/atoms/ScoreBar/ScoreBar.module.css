@@ -1,12 +1,13 @@
 .bar {
   display: flex;
-  height: 4rem;
+  gap: 1rem;
 }
 
 .segment {
-  aspect-ratio: 1;
+  height: 4rem;
+  width: 4rem;
   flex: 1;
-  border: 2px solid #444;
+  border: 1px solid #444;
 }
 
 .filled {
