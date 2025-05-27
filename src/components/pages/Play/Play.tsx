@@ -49,14 +49,18 @@ const Play = () => {
   return (
     <>
       <div {...createStyle(classes.header)}>
-        <Button
-          s={{ classNames: classes.back }}
-          onClick={() => {
-            push('list');
-          }}
-        >
-          Back
-        </Button>
+        <div {...createStyle(classes.nav)}>
+          <Button
+            s={{ classNames: classes.back }}
+            onClick={() => {
+              push('list');
+            }}
+          >
+            Back
+          </Button>
+          <ScoreBar maxScore={maxScore} score={score} />
+        </div>
+
         {isWin && <span {...createStyle(classes.win)}>You Win</span>}
         {!isWin && (
           <FigureRow
@@ -66,7 +70,6 @@ const Play = () => {
             onClick={onClick}
           />
         )}
-        <ScoreBar maxScore={maxScore} score={score} />
       </div>
       <div {...createStyle(classes.body)}>
         <PastRowGrid pastRows={pastRows} />

@@ -1,10 +1,10 @@
 .bar {
   display: flex;
-  gap: 2rem;
+  height: 4rem;
 }
 
 .segment {
-  height: 4rem;
+  aspect-ratio: 1;
   flex: 1;
   border: 2px solid #444;
 }

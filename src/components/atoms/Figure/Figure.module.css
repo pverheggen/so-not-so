@@ -1,25 +1,16 @@
 .figure {
   aspect-ratio: 1;
-  border: 2px solid #eee;
-  padding: 0;
-  box-sizing: border-box;
   background-color: var(--bg);
-  appearance: unset;
-  align-items: unset;
-  cursor: pointer;
-  box-shadow: -3px -3px 0 0 #eee;
 
   &.pass {
-    box-shadow: -3px -3px 0 0 #07d34e;
-  }
-  &:disabled {
-    cursor: default;
-    border-color: #444;
-    border-width: 1px;
-    box-shadow: none;
-  }
-  &.pass,
-  &.pass:disabled {
     border-color: #07d34e;
   }
+}
+
+.div {
+  margin: 2px;
+}
+
+.button.button {
+  padding: 0;
 }

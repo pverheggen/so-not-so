@@ -1,23 +1,31 @@
 import { IFigureProps } from './types';
 import classes from './Figure.module.css';
-import { createStyle } from 'utils';
+import { addClassNames, createStyle } from 'utils';
+import { Button } from '../Button';
 
-const Figure = ({
-  children,
-  onClick,
-  pass,
-  s,
-  selectable,
-}: IFigureProps) => {
+const Figure = ({ children, onClick, pass, s, selectable }: IFigureProps) => {
+  if (!selectable) {
+    return (
+      <div
+        {...createStyle(
+          [classes.div, classes.figure, { [classes.pass]: pass }],
+          s,
+        )}
+      >
+        {children}
+      </div>
+    );
+  }
   return (
-    <button
-      type="button"
-      disabled={!selectable}
+    <Button
       onClick={onClick}
-      {...createStyle([classes.figure, { [classes.pass]: pass }], s)}
+      s={addClassNames(
+        [classes.figure, classes.button, { [classes.pass]: pass }],
+        s,
+      )}
     >
       {children}
-    </button>
+    </Button>
   );
 };
 
