@@ -13,14 +13,32 @@ const PastRowGrid = ({ pastRows }: IPastRowGridProps) => {
       <div {...createStyle(classes.grid)}>
         {pastRows
           ?.map(({ figures }) =>
-            figures.map((figure) => {
+            figures.map((figure, ifigure) => {
               switch (figure.type) {
                 case 'grid':
-                  return <GridFigure key={figure} figure={figure} />;
+                  return (
+                    <GridFigure
+                      key={figure}
+                      figure={figure}
+                      pass={ifigure % 4 === 0}
+                    />
+                  );
                 case 'svg':
-                  return <SvgFigure key={figure} figure={figure} />;
+                  return (
+                    <SvgFigure
+                      key={figure}
+                      figure={figure}
+                      pass={ifigure % 4 === 0}
+                    />
+                  );
                 case 'text':
-                  return <TextFigure key={figure} figure={figure} />;
+                  return (
+                    <TextFigure
+                      key={figure}
+                      figure={figure}
+                      pass={ifigure % 4 === 0}
+                    />
+                  );
               }
             }),
           )
