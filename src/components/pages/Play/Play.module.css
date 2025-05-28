@@ -27,10 +27,13 @@
 
 .wrong {
   transform: translate(0rem, 0rem);
-  border-color: red;
+  border-color: #b50000;
   animation-name: wrong;
   animation-timing-function: ease;
   animation-duration: var(--dur);
+  &::before {
+    display: none;
+  }
 }
 
 .win {
