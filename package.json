@@ -26,6 +26,7 @@
     "prettier": "3.0.3",
     "typescript": "^5.8.2",
     "vite": "^6.2.1",
+    "vite-plugin-optimize-css-modules": "^1.2.0",
     "vite-tsconfig-paths": "^4.2.1"
   }
 }
