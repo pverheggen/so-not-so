@@ -1,0 +1,9 @@
+.app {
+  width: 96rem;
+}
+
+/* Global style resets */
+
+button {
+  padding: 0;
+}
