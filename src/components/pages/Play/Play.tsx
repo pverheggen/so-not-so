@@ -40,6 +40,15 @@ const Play = () => {
         ),
       );
     }
+    await currentRowAnimations.play(
+      figures.map(
+        (_, ifigure) =>
+          figureIndex === ifigure && {
+            classNames: classes.right,
+            duration: 500,
+          },
+      ),
+    );
     setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, puzzle));
     setPastRows([puzzleUtils.sortRow(currentRow), ...pastRows]);
     setScore((score) => score + 1);
