@@ -8,7 +8,7 @@ const Figure = ({ children, onClick, pass, s, selectable }: IFigureProps) => {
     return (
       <div
         {...createStyle(
-          [classes.div, classes.figure, { [classes.pass]: pass }],
+          [classes.figure, classes.div, { [classes.pass]: pass }],
           s,
         )}
       >

@@ -1,12 +1,10 @@
 import { useState } from 'preact/hooks';
-import { FigureRow, ScoreBar } from 'components';
+import { Button, FigureRow, PastRowGrid, ScoreBar } from 'components';
 import classes from './Play.module.css';
 import { FigureRowData } from 'types';
 import { createStyle, puzzleUtils } from 'utils';
 import { useAnimations } from 'hooks';
 import { useRouter } from 'contexts';
-import { PastRowGrid } from 'components/organisms/PastRowGrid';
-import { Button } from 'components/atoms/Button';
 
 const Play = () => {
   const { push } = useRouter();

@@ -1,0 +1,10 @@
+.grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: var(--gap);
+
+  .button {
+    aspect-ratio: 1;
+    font-size: 8rem;
+  }
+}
