@@ -40,6 +40,7 @@ const Play = () => {
         ),
       );
     }
+    setPastRows([puzzleUtils.sortRow(currentRow), ...pastRows]);
     await currentRowAnimations.play(
       figures.map(
         (_, ifigure) =>
@@ -50,7 +51,6 @@ const Play = () => {
       ),
     );
     setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, puzzle));
-    setPastRows([puzzleUtils.sortRow(currentRow), ...pastRows]);
     setScore((score) => score + 1);
   };
   return (
@@ -79,7 +79,18 @@ const Play = () => {
         )}
       </div>
       <div {...createStyle(classes.body)}>
-        <PastRowGrid pastRows={pastRows} />
+        <PastRowGrid
+          pastRows={pastRows}
+          overrides={
+            currentRowAnimations.styles.some(
+              (s) => s?.classNames === classes.right,
+            )
+              ? {
+                  grid: { s: { classNames: classes.mover } },
+                }
+              : undefined
+          }
+        />
       </div>
     </>
   );

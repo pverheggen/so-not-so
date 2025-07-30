@@ -1,7 +1,12 @@
 import { FigureRowData } from 'types';
-import { IStyleProps } from 'utils';
+import { IStyleOverrides } from 'utils';
 
+export interface IPastRowGridOverrides {
+  grid?: IStyleOverrides;
+  currentRow?: (IStyleOverrides | undefined)[];
+}
 export interface IPastRowGridProps {
+  currentRow?: FigureRowData;
   pastRows: FigureRowData[];
-  s?: IStyleProps;
+  overrides?: IPastRowGridOverrides;
 }

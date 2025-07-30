@@ -19,6 +19,7 @@
 .body {
   background-color: var(--bg);
   position: relative;
+  --fh: calc(var(--gap) + 0.25 * (96rem - 3 * var(--gap)));
 }
 
 .row {
@@ -85,5 +86,19 @@
   }
   100% {
     transform: scale(1);
+  }
+}
+
+.body .mover {
+  animation-name: mover;
+  animation-duration: 500ms;
+}
+
+@keyframes mover {
+  0% {
+    transform: translateY(calc(-1 * var(--fh)));
+  }
+  100% {
+    transform: translateY(0);
   }
 }

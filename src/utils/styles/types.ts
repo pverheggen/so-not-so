@@ -12,3 +12,7 @@ export interface IStyle {
   className?: string;
   style?: JSX.CSSProperties;
 }
+
+export interface IStyleOverrides {
+  s?: IStyleProps;
+}
