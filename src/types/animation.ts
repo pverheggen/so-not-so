@@ -1,13 +1,5 @@
-import { IStyleProps } from 'utils';
-
-export interface IAnimation extends IStyleProps {
-  duration: number;
-}
-
-export type AnimationLike = IAnimation | false | undefined;
-
-export interface IUseAnimationReturn {
+export interface IUseAnimationReturn<TStyleOverride> {
   isPlaying: boolean;
-  play: (animations: AnimationLike[]) => Promise<void>;
-  styles: (IStyleProps | undefined)[];
+  play: (duration: number, overrides: TStyleOverride) => Promise<void>;
+  overrides?: TStyleOverride;
 }

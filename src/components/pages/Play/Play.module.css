@@ -91,7 +91,7 @@
 
 .body .mover {
   animation-name: mover;
-  animation-duration: 500ms;
+  animation-duration: var(--dur);
 }
 
 @keyframes mover {

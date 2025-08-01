@@ -7,12 +7,11 @@ const FigureRow = ({
   onClick,
   passIndex,
   selectable,
-  s,
   figures,
-  figureStyles,
+  overrides,
 }: IFigureRowProps) => {
   return (
-    <div {...createStyle(classes.row, s)}>
+    <div {...createStyle(classes.row, overrides?.row?.s)}>
       {figures?.map((figure, ifigure) => {
         const props = {
           onClick: () => {
@@ -20,7 +19,7 @@ const FigureRow = ({
           },
           pass: ifigure === passIndex,
           selectable,
-          s: figureStyles?.[ifigure],
+          s: overrides?.figures?.[ifigure]?.s,
         };
         switch (figure.type) {
           case 'svg':

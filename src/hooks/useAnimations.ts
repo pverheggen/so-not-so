@@ -1,19 +1,21 @@
 import { useState } from 'preact/hooks';
-import { AnimationLike, IUseAnimationReturn } from 'types';
-import { IStyleProps } from 'utils';
+import { IUseAnimationReturn } from 'types';
 import { useTimeout } from './useTimeout';
 
-interface IAnimationState {
+interface IAnimationState<TStyleOverride> {
   resolve?: () => void;
-  styles?: (IStyleProps | undefined)[];
+  overrides?: TStyleOverride;
   timeout: number;
 }
 
-const defaultState: IAnimationState = { timeout: 0 };
+const defaultState = { timeout: 0 };
 
-export const useAnimations = (): IUseAnimationReturn => {
-  const [state, setState] = useState<IAnimationState>(defaultState);
-  const { resolve, styles, timeout } = state;
+export const useAnimations = <
+  TStyleOverride,
+>(): IUseAnimationReturn<TStyleOverride> => {
+  const [state, setState] =
+    useState<IAnimationState<TStyleOverride>>(defaultState);
+  const { resolve, overrides, timeout } = state;
   const isPlaying = !!resolve;
   useTimeout(
     () => {
@@ -24,37 +26,19 @@ export const useAnimations = (): IUseAnimationReturn => {
     timeout,
   );
 
-  const play = async (animations: AnimationLike[]) => {
+  const play = async (duration: number, overrides: TStyleOverride) => {
     if (isPlaying) return;
-    const styles: (IStyleProps | undefined)[] = [];
-    let totalDelay = 0;
-    animations.forEach((animation) => {
-      if (!animation) {
-        styles.push(undefined);
-        return;
-      }
-      const { duration, styleVars, ...s } = animation;
-      styles.push({
-        ...s,
-        styleVars: {
-          ...styleVars,
-          del: `${totalDelay}ms`,
-          dur: `${duration}ms`,
-        },
-      });
-      totalDelay += duration;
-    });
     return new Promise<void>((resolve) => {
       setState({
         resolve,
-        styles,
-        timeout: totalDelay,
+        overrides,
+        timeout: duration,
       });
     });
   };
   return {
     isPlaying,
     play,
-    styles: styles ?? [],
+    overrides,
   };
 };

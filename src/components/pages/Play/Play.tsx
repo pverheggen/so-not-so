@@ -1,10 +1,22 @@
 import { useState } from 'preact/hooks';
-import { Button, FigureRow, PastRowGrid, ScoreBar } from 'components';
+import {
+  Button,
+  FigureRow,
+  IFigureRowOverrides,
+  IPastRowGridOverrides,
+  PastRowGrid,
+  ScoreBar,
+} from 'components';
 import classes from './Play.module.css';
 import { FigureRowData } from 'types';
 import { createStyle, puzzleUtils } from 'utils';
 import { useAnimations } from 'hooks';
 import { useRouter } from 'contexts';
+
+interface IPlayOverrides {
+  figureRow?: IFigureRowOverrides;
+  pastRowGrid?: IPastRowGridOverrides;
+}
 
 const Play = () => {
   const { push } = useRouter();
@@ -18,7 +30,7 @@ const Play = () => {
     puzzleUtils.sortRow(puzzleUtils.createFigureRow(0, puzzle)),
   ]);
   const [score, setScore] = useState(0);
-  const currentRowAnimations = useAnimations();
+  const currentRowAnimations = useAnimations<IPlayOverrides>();
 
   const maxScore = 8;
   const isWin = score >= maxScore;
@@ -30,26 +42,50 @@ const Play = () => {
     }
     if (figureIndex !== passIndex) {
       setScore(0);
-      return currentRowAnimations.play(
-        figures.map(
-          (_, ifigure) =>
-            figureIndex === ifigure && {
-              classNames: classes.wrong,
-              duration: 300,
-            },
-        ),
-      );
+      return currentRowAnimations.play(300, {
+        figureRow: {
+          figures: figures.map((_, ifigure) =>
+            figureIndex === ifigure
+              ? {
+                  s: {
+                    classNames: classes.wrong,
+                    styleVars: {
+                      dur: '300ms',
+                    },
+                  },
+                }
+              : undefined,
+          ),
+        },
+      });
     }
     setPastRows([puzzleUtils.sortRow(currentRow), ...pastRows]);
-    await currentRowAnimations.play(
-      figures.map(
-        (_, ifigure) =>
-          figureIndex === ifigure && {
-            classNames: classes.right,
-            duration: 500,
+    await currentRowAnimations.play(500, {
+      figureRow: {
+        figures: figures.map((_, ifigure) =>
+          figureIndex === ifigure
+            ? {
+                s: {
+                  classNames: classes.right,
+                  styleVars: {
+                    dur: '500ms',
+                  },
+                },
+              }
+            : undefined,
+        ),
+      },
+      pastRowGrid: {
+        grid: {
+          s: {
+            classNames: classes.mover,
+            styleVars: {
+              dur: '500ms',
+            },
           },
-      ),
-    );
+        },
+      },
+    });
     setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, puzzle));
     setScore((score) => score + 1);
   };
@@ -73,23 +109,15 @@ const Play = () => {
           <FigureRow
             selectable
             figures={figures}
-            figureStyles={currentRowAnimations.styles}
             onClick={onClick}
+            overrides={currentRowAnimations.overrides?.figureRow}
           />
         )}
       </div>
       <div {...createStyle(classes.body)}>
         <PastRowGrid
           pastRows={pastRows}
-          overrides={
-            currentRowAnimations.styles.some(
-              (s) => s?.classNames === classes.right,
-            )
-              ? {
-                  grid: { s: { classNames: classes.mover } },
-                }
-              : undefined
-          }
+          overrides={currentRowAnimations.overrides?.pastRowGrid}
         />
       </div>
     </>
