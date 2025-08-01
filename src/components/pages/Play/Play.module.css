@@ -94,11 +94,25 @@
   animation-duration: var(--dur);
 }
 
+.body .moverbg {
+  animation-name: moverbg;
+  animation-duration: var(--dur);
+}
+
 @keyframes mover {
   0% {
     transform: translateY(calc(-1 * var(--fh)));
   }
   100% {
     transform: translateY(0);
+  }
+}
+
+@keyframes moverbg {
+  0% {
+    clip-path: inset(0 0 calc(var(--gap) + var(--fh)));
+  }
+  100% {
+    clip-path: inset(0 0 var(--gap));
   }
 }

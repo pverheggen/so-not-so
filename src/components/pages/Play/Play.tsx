@@ -84,6 +84,14 @@ const Play = () => {
             },
           },
         },
+        bg: {
+          s: {
+            classNames: classes.moverbg,
+            styleVars: {
+              dur: '500ms',
+            },
+          },
+        },
       },
     });
     setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, puzzle));

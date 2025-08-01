@@ -10,7 +10,7 @@ const PastRowGrid = ({
 }: IPastRowGridProps) => {
   return (
     <div {...createStyle(classes.ct)}>
-      <div {...createStyle(classes.bg)}>
+      <div {...createStyle(classes.bg, overrides?.bg?.s)}>
         <div {...createStyle(classes.bgpass)}></div>
         <div {...createStyle(classes.bgfail)}></div>
       </div>

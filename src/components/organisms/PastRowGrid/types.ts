@@ -3,6 +3,7 @@ import { IStyleOverrides } from 'utils';
 
 export interface IPastRowGridOverrides {
   grid?: IStyleOverrides;
+  bg?: IStyleOverrides;
   currentRow?: (IStyleOverrides | undefined)[];
 }
 
