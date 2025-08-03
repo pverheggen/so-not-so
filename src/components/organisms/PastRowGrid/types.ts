@@ -1,14 +1,14 @@
+import { ISvgFigureOverrides } from 'components';
 import { FigureRowData } from 'types';
 import { IStyleOverrides } from 'utils';
 
 export interface IPastRowGridOverrides {
   grid?: IStyleOverrides;
   bg?: IStyleOverrides;
-  currentRow?: (IStyleOverrides | undefined)[];
+  firstRow?: (ISvgFigureOverrides | undefined)[];
 }
 
 export interface IPastRowGridProps {
-  currentRow?: FigureRowData;
   pastRows: FigureRowData[];
   overrides?: IPastRowGridOverrides;
 }

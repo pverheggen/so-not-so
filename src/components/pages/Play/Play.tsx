@@ -47,10 +47,12 @@ const Play = () => {
           figures: figures.map((_, ifigure) =>
             figureIndex === ifigure
               ? {
-                  s: {
-                    classNames: classes.wrong,
-                    styleVars: {
-                      dur: '300ms',
+                  figure: {
+                    s: {
+                      classNames: classes.wrong,
+                      styleVars: {
+                        dur: '300ms',
+                      },
                     },
                   },
                 }
@@ -60,38 +62,84 @@ const Play = () => {
       });
     }
     setPastRows([puzzleUtils.sortRow(currentRow), ...pastRows]);
-    await currentRowAnimations.play(500, {
+    await currentRowAnimations.play(1000, {
       figureRow: {
         figures: figures.map((_, ifigure) =>
           figureIndex === ifigure
             ? {
-                s: {
-                  classNames: classes.right,
-                  styleVars: {
-                    dur: '500ms',
+                figure: {
+                  s: {
+                    classNames: classes.right,
+                    styleVars: {
+                      dur: '375ms',
+                    },
+                  },
+                },
+                svg: {
+                  s: {
+                    classNames: classes.slidebottom,
+                    styleVars: {
+                      dur: '375ms',
+                      del: '250ms',
+                    },
                   },
                 },
               }
-            : undefined,
+            : {
+                svg: {
+                  s: {
+                    classNames: classes.slidebottom,
+                    styleVars: {
+                      dur: '250ms',
+                      del: '250ms',
+                    },
+                  },
+                },
+              },
         ),
       },
       pastRowGrid: {
         grid: {
           s: {
-            classNames: classes.mover,
+            classNames: classes.slidetop,
             styleVars: {
-              dur: '500ms',
+              dur: '250ms',
             },
           },
         },
         bg: {
           s: {
-            classNames: classes.moverbg,
+            classNames: classes.slidebg,
             styleVars: {
-              dur: '500ms',
+              dur: '250ms',
             },
           },
         },
+        firstRow: figures.map((_, ifigure) =>
+          ifigure === 0
+            ? {
+                svg: {
+                  s: {
+                    classNames: classes.slidetop,
+                    styleVars: {
+                      dur: '250ms',
+                      del: '375ms',
+                    },
+                  },
+                },
+              }
+            : {
+                svg: {
+                  s: {
+                    classNames: classes.slidetop,
+                    styleVars: {
+                      dur: '250ms',
+                      del: '250ms',
+                    },
+                  },
+                },
+              },
+        ),
       },
     });
     setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, puzzle));

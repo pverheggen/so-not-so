@@ -3,11 +3,7 @@ import classes from './PastRowGrid.module.css';
 import { IPastRowGridProps } from './types';
 import { createStyle } from 'utils';
 
-const PastRowGrid = ({
-  currentRow,
-  pastRows,
-  overrides,
-}: IPastRowGridProps) => {
+const PastRowGrid = ({ pastRows, overrides }: IPastRowGridProps) => {
   return (
     <div {...createStyle(classes.ct)}>
       <div {...createStyle(classes.bg, overrides?.bg?.s)}>
@@ -15,21 +11,8 @@ const PastRowGrid = ({
         <div {...createStyle(classes.bgfail)}></div>
       </div>
       <div {...createStyle(classes.grid, overrides?.grid?.s)}>
-        {currentRow?.figures.map((figure, ifigure) => {
-          switch (figure.type) {
-            case 'svg':
-              return (
-                <SvgFigure
-                  key={figure}
-                  figure={figure}
-                  pass={ifigure % 4 === 0}
-                  s={overrides?.currentRow?.[ifigure]?.s}
-                />
-              );
-          }
-        })}
         {pastRows
-          ?.map(({ figures }) =>
+          ?.map(({ figures }, irow) =>
             figures.map((figure, ifigure) => {
               switch (figure.type) {
                 case 'svg':
@@ -38,6 +21,9 @@ const PastRowGrid = ({
                       key={figure}
                       figure={figure}
                       pass={ifigure % 4 === 0}
+                      overrides={
+                        irow === 0 ? overrides?.firstRow?.[ifigure] : undefined
+                      }
                     />
                   );
               }

@@ -13,17 +13,20 @@ const FigureRow = ({
   return (
     <div {...createStyle(classes.row, overrides?.row?.s)}>
       {figures?.map((figure, ifigure) => {
-        const props = {
-          onClick: () => {
-            onClick?.(ifigure);
-          },
-          pass: ifigure === passIndex,
-          selectable,
-          s: overrides?.figures?.[ifigure]?.s,
-        };
         switch (figure.type) {
           case 'svg':
-            return <SvgFigure key={figure} figure={figure} {...props} />;
+            return (
+              <SvgFigure
+                key={figure}
+                figure={figure}
+                onClick={() => {
+                  onClick?.(ifigure);
+                }}
+                pass={ifigure === passIndex}
+                selectable={selectable}
+                overrides={overrides?.figures?.[ifigure]}
+              />
+            );
         }
       })}
     </div>

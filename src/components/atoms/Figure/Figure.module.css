@@ -1,6 +1,7 @@
 .figure {
   aspect-ratio: 1;
   background-color: var(--bg);
+  overflow: hidden;
 
   &.button {
     padding: 0;

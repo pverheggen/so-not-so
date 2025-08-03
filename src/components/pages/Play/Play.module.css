@@ -7,6 +7,7 @@
   flex-direction: column;
   gap: 2rem;
   z-index: 1;
+  --fh: calc(var(--gap) + 0.25 * (96rem - 3 * var(--gap)));
 }
 
 .nav {
@@ -27,7 +28,6 @@
 }
 
 .wrong {
-  transform: translate(0rem, 0rem);
   border-color: #b50000;
   animation-name: wrong;
   animation-timing-function: ease;
@@ -38,7 +38,6 @@
 }
 
 .right {
-  transform: scale(1);
   border-color: #20f86c;
   animation-name: right;
   animation-timing-function: ease;
@@ -89,17 +88,16 @@
   }
 }
 
-.body .mover {
-  animation-name: mover;
+.header .slidetop,
+.body .slidetop {
+  transform: translateY(calc(-1 * var(--fh)));
+  animation-name: slidetop;
+  animation-fill-mode: forwards;
   animation-duration: var(--dur);
+  animation-delay: var(--del);
 }
 
-.body .moverbg {
-  animation-name: moverbg;
-  animation-duration: var(--dur);
-}
-
-@keyframes mover {
+@keyframes slidetop {
   0% {
     transform: translateY(calc(-1 * var(--fh)));
   }
@@ -108,7 +106,29 @@
   }
 }
 
-@keyframes moverbg {
+.header .slidebottom,
+.body .slidebottom {
+  animation-name: slidebottom;
+  animation-fill-mode: forwards;
+  animation-duration: var(--dur);
+  animation-delay: var(--del);
+}
+
+@keyframes slidebottom {
+  0% {
+    transform: translateY(0);
+  }
+  100% {
+    transform: translateY(var(--fh));
+  }
+}
+
+.body .slidebg {
+  animation-name: slidebg;
+  animation-duration: var(--dur);
+}
+
+@keyframes slidebg {
   0% {
     clip-path: inset(0 0 calc(var(--gap) + var(--fh)));
   }

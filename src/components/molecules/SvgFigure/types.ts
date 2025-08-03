@@ -1,10 +1,15 @@
 import { SvgFigureData } from 'types';
-import { IStyleProps } from 'utils';
+import { IStyleOverrides } from 'utils';
+
+export interface ISvgFigureOverrides {
+  svg?: IStyleOverrides;
+  figure?: IStyleOverrides;
+}
 
 export interface ISvgFigureProps {
   onClick?: () => void;
   figure: SvgFigureData;
-  s?: IStyleProps;
   pass?: boolean;
   selectable?: boolean;
+  overrides?: ISvgFigureOverrides;
 }

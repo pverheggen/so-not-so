@@ -1,18 +1,24 @@
 import { Figure } from 'components';
 import classes from './SvgFigure.module.css';
 import { ISvgFigureProps } from './types';
+import { createStyle } from 'utils';
 
 const SvgFigure = ({
   onClick,
   pass,
   selectable,
   figure,
-  s,
+  overrides,
 }: ISvgFigureProps) => {
   const { path } = figure;
   return (
-    <Figure onClick={onClick} pass={pass} selectable={selectable} s={s}>
-      <svg viewBox="0 0 12 12" className={classes.svg}>
+    <Figure
+      onClick={onClick}
+      pass={pass}
+      selectable={selectable}
+      s={overrides?.figure?.s}
+    >
+      <svg viewBox="0 0 12 12" {...createStyle(classes.svg, overrides?.svg?.s)}>
         <path className={classes.path} d={path.flat().join(' ')}></path>
       </svg>
     </Figure>
