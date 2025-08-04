@@ -2,6 +2,12 @@
   display: block;
 }
 
+.svgnext {
+  display: block;
+  position: absolute;
+  top: 0;
+}
+
 .path {
   stroke: #eee;
   stroke-width: 0.2;

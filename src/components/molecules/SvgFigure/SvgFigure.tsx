@@ -21,6 +21,17 @@ const SvgFigure = ({
       <svg viewBox="0 0 12 12" {...createStyle(classes.svg, overrides?.svg?.s)}>
         <path className={classes.path} d={path.flat().join(' ')}></path>
       </svg>
+      {overrides?.nextFigure && (
+        <svg
+          viewBox="0 0 12 12"
+          {...createStyle(classes.svgnext, overrides.nextFigure.s)}
+        >
+          <path
+            className={classes.path}
+            d={overrides.nextFigure.figure.path.flat().join(' ')}
+          ></path>
+        </svg>
+      )}
     </Figure>
   );
 };

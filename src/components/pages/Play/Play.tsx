@@ -8,7 +8,7 @@ import {
   ScoreBar,
 } from 'components';
 import classes from './Play.module.css';
-import { FigureRowData } from 'types';
+import { FigureRowData, SvgFigureData } from 'types';
 import { createStyle, puzzleUtils } from 'utils';
 import { useAnimations } from 'hooks';
 import { useRouter } from 'contexts';
@@ -62,7 +62,8 @@ const Play = () => {
       });
     }
     setPastRows([puzzleUtils.sortRow(currentRow), ...pastRows]);
-    await currentRowAnimations.play(1000, {
+    const nextRow = puzzleUtils.createFigureRow(pastRows.length + 1, puzzle);
+    await currentRowAnimations.play(600, {
       figureRow: {
         figures: figures.map((_, ifigure) =>
           figureIndex === ifigure
@@ -71,13 +72,23 @@ const Play = () => {
                   s: {
                     classNames: classes.right,
                     styleVars: {
-                      dur: '375ms',
+                      dur: '600ms',
                     },
                   },
                 },
                 svg: {
                   s: {
                     classNames: classes.slidebottom,
+                    styleVars: {
+                      dur: '375ms',
+                      del: '250ms',
+                    },
+                  },
+                },
+                nextFigure: {
+                  figure: nextRow.figures[ifigure] as SvgFigureData,
+                  s: {
+                    classNames: classes.slidetop,
                     styleVars: {
                       dur: '375ms',
                       del: '250ms',
@@ -95,6 +106,16 @@ const Play = () => {
                     },
                   },
                 },
+                nextFigure: {
+                  figure: nextRow.figures[ifigure] as SvgFigureData,
+                  s: {
+                    classNames: classes.slidetop,
+                    styleVars: {
+                      dur: '250ms',
+                      del: '250ms',
+                    },
+                  },
+                },
               },
         ),
       },
@@ -103,7 +124,7 @@ const Play = () => {
           s: {
             classNames: classes.slidetop,
             styleVars: {
-              dur: '250ms',
+              dur: '600ms',
             },
           },
         },
@@ -111,7 +132,7 @@ const Play = () => {
           s: {
             classNames: classes.slidebg,
             styleVars: {
-              dur: '250ms',
+              dur: '600ms',
             },
           },
         },
@@ -142,7 +163,7 @@ const Play = () => {
         ),
       },
     });
-    setCurrentRow(puzzleUtils.createFigureRow(pastRows.length + 1, puzzle));
+    setCurrentRow(nextRow);
     setScore((score) => score + 1);
   };
   return (
