@@ -95,7 +95,7 @@
   animation-fill-mode: forwards;
   animation-duration: var(--dur);
   animation-delay: var(--del);
-  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-timing-function: ease-out;
 }
 
 @keyframes slidetop {
@@ -113,7 +113,7 @@
   animation-fill-mode: forwards;
   animation-duration: var(--dur);
   animation-delay: var(--del);
-  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-timing-function: ease-out;
 }
 
 @keyframes slidebottom {
@@ -128,7 +128,7 @@
 .body .slidebg {
   animation-name: slidebg;
   animation-duration: var(--dur);
-  animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
+  animation-timing-function: ease-out;
 }
 
 @keyframes slidebg {

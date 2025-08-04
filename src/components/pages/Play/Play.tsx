@@ -63,7 +63,7 @@ const Play = () => {
     }
     setPastRows([puzzleUtils.sortRow(currentRow), ...pastRows]);
     const nextRow = puzzleUtils.createFigureRow(pastRows.length + 1, puzzle);
-    await currentRowAnimations.play(600, {
+    await currentRowAnimations.play(650, {
       figureRow: {
         figures: figures.map((_, ifigure) =>
           figureIndex === ifigure
@@ -72,7 +72,7 @@ const Play = () => {
                   s: {
                     classNames: classes.right,
                     styleVars: {
-                      dur: '600ms',
+                      dur: '550ms',
                     },
                   },
                 },
@@ -80,8 +80,8 @@ const Play = () => {
                   s: {
                     classNames: classes.slidebottom,
                     styleVars: {
-                      dur: '375ms',
-                      del: '250ms',
+                      dur: '350ms',
+                      del: '300ms',
                     },
                   },
                 },
@@ -90,8 +90,8 @@ const Play = () => {
                   s: {
                     classNames: classes.slidetop,
                     styleVars: {
-                      dur: '375ms',
-                      del: '250ms',
+                      dur: '350ms',
+                      del: '300ms',
                     },
                   },
                 },
@@ -101,8 +101,8 @@ const Play = () => {
                   s: {
                     classNames: classes.slidebottom,
                     styleVars: {
-                      dur: '250ms',
-                      del: '250ms',
+                      dur: '350ms',
+                      del: '100ms',
                     },
                   },
                 },
@@ -111,8 +111,8 @@ const Play = () => {
                   s: {
                     classNames: classes.slidetop,
                     styleVars: {
-                      dur: '250ms',
-                      del: '250ms',
+                      dur: '350ms',
+                      del: '100ms',
                     },
                   },
                 },
@@ -124,7 +124,7 @@ const Play = () => {
           s: {
             classNames: classes.slidetop,
             styleVars: {
-              dur: '600ms',
+              dur: '550ms',
             },
           },
         },
@@ -132,7 +132,7 @@ const Play = () => {
           s: {
             classNames: classes.slidebg,
             styleVars: {
-              dur: '600ms',
+              dur: '550ms',
             },
           },
         },
@@ -143,8 +143,8 @@ const Play = () => {
                   s: {
                     classNames: classes.slidetop,
                     styleVars: {
-                      dur: '250ms',
-                      del: '375ms',
+                      dur: '350ms',
+                      del: '300ms',
                     },
                   },
                 },
@@ -154,8 +154,8 @@ const Play = () => {
                   s: {
                     classNames: classes.slidetop,
                     styleVars: {
-                      dur: '250ms',
-                      del: '250ms',
+                      dur: '350ms',
+                      del: '100ms',
                     },
                   },
                 },
