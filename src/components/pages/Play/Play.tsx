@@ -97,6 +97,11 @@ const Play = () => {
                 },
               }
             : {
+                figure: {
+                  s: {
+                    classNames: classes.animatehidden,
+                  },
+                },
                 svg: {
                   s: {
                     classNames: classes.slidebottom,

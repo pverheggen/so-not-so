@@ -43,9 +43,14 @@
   animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
   animation-duration: var(--dur);
   z-index: 999;
+  overflow: hidden;
   &::before {
     display: none;
   }
+}
+
+.animatehidden {
+  overflow: hidden;
 }
 
 .win {
