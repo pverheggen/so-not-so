@@ -189,8 +189,10 @@ reseed(12345);
 
 /*
 [
-  2, 2*, 3, 1,
-  0, 
+  01: 2, 2 (more even dist), 3, 1,
+  05: 0, 2 (needs more shapes), 2 (remove shapes?), 0 (move even dist), 
+  09: (ambiguous), 3, 1, 1 (needs more, shouldn't discriminate between odd/even),
+  13: 
 ]
 */
 
