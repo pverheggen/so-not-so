@@ -7,7 +7,7 @@
   flex-direction: column;
   gap: 2rem;
   z-index: 1;
-  --fh: calc(var(--gap) + 0.25 * (96rem - 3 * var(--gap)));
+  --fh: calc(var(--gap) + 0.333 * (96rem - 2 * var(--gap)));
 }
 
 .nav {
@@ -20,7 +20,7 @@
 .body {
   background-color: var(--bg);
   position: relative;
-  --fh: calc(var(--gap) + 0.25 * (96rem - 3 * var(--gap)));
+  --fh: calc(var(--gap) + 0.333 * (96rem - 2 * var(--gap)));
 }
 
 .row {

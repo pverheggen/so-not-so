@@ -15,7 +15,7 @@ export const createFigureRow = (
   const passes = [];
   const fails = [];
   const passesCount = 1;
-  const failsCount = 3;
+  const failsCount = 2;
   while (passes.length < passesCount || fails.length < failsCount) {
     const { svg, pass } = puzzle();
     if (pass && passes.length < passesCount) {
@@ -24,10 +24,11 @@ export const createFigureRow = (
       fails.push(svg);
     }
   }
-  const passIndex = randomInt(0, 3);
+  const passIndex = randomInt(0, 2);
   const [figureToSplice] = passes;
   const figures = [...fails];
   figures.splice(passIndex, 0, figureToSplice);
+  //figures.push({ type: 'svg', path: [] });
   return {
     key,
     passIndex,
