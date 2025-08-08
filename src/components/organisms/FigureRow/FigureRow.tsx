@@ -5,7 +5,6 @@ import { createStyle } from 'utils';
 
 const FigureRow = ({
   onClick,
-  passIndex,
   selectable,
   figures,
   overrides,
@@ -22,7 +21,6 @@ const FigureRow = ({
                 onClick={() => {
                   onClick?.(ifigure);
                 }}
-                pass={ifigure === passIndex}
                 selectable={selectable}
                 overrides={overrides?.figures?.[ifigure]}
               />

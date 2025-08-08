@@ -10,7 +10,6 @@ export interface IFigureRowOverrides {
 export interface IFigureRowProps {
   figures?: FigureData[];
   onClick?: (figureIndex: number) => void;
-  passIndex?: number;
   selectable?: boolean;
   overrides?: IFigureRowOverrides;
 }
