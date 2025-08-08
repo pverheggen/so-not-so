@@ -3,26 +3,16 @@ import classes from './Figure.module.css';
 import { addClassNames, createStyle } from 'utils';
 import { Button } from '../Button';
 
-const Figure = ({ children, onClick, pass, s, selectable }: IFigureProps) => {
+const Figure = ({ children, onClick, s, selectable }: IFigureProps) => {
   if (!selectable) {
     return (
-      <div
-        {...createStyle(
-          [classes.figure, classes.div, { [classes.pass]: pass }],
-          s,
-        )}
-      >
-        {children}
-      </div>
+      <div {...createStyle([classes.figure, classes.div], s)}>{children}</div>
     );
   }
   return (
     <Button
       onClick={onClick}
-      s={addClassNames(
-        [classes.figure, classes.button, { [classes.pass]: pass }],
-        s,
-      )}
+      s={addClassNames([classes.figure, classes.button], s)}
     >
       {children}
     </Button>

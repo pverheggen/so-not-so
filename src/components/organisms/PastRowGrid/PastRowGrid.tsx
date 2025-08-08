@@ -20,10 +20,17 @@ const PastRowGrid = ({ pastRows, overrides }: IPastRowGridProps) => {
                     <SvgFigure
                       key={figure}
                       figure={figure}
-                      pass={ifigure % 4 === 0}
-                      overrides={
-                        irow === 0 ? overrides?.firstRow?.[ifigure] : undefined
-                      }
+                      overrides={{
+                        figure: {
+                          s: {
+                            classNames:
+                              ifigure === 0 ? classes.pass : classes.wrong,
+                          },
+                        },
+                        ...(irow === 0
+                          ? overrides?.firstRow?.[ifigure]
+                          : undefined),
+                      }}
                     />
                   );
               }

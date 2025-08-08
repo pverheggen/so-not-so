@@ -2,7 +2,7 @@
   position: relative;
   font-size: 4rem;
   line-height: 6rem;
-  color: white;
+  color: #fff;
   font-family: monospace;
   text-transform: uppercase;
   padding: 0 4rem;
@@ -13,13 +13,31 @@
   appearance: unset;
   align-items: unset;
   cursor: pointer;
+  --bs-color: #fff;
+
+  transition: box-shadow 100ms;
+  box-shadow:
+    -2px -2px 0 0 var(--bg),
+    -3px -3px 0 0 var(--bs-color),
+    -5px -5px 0 0 var(--bg),
+    -6px -6px 0 0 var(--bs-color);
+
+  &:hover {
+    box-shadow:
+      -2px -2px 0 0 var(--bg),
+      -3px -3px 0 0 var(--bs-color),
+      -2px -2px 0 0 var(--bg),
+      -3px -3px 0 0 var(--bs-color);
+  }
 
   &:disabled {
     cursor: default;
     border-color: #444;
+    box-shadow: none;
   }
 }
 
+/*
 .button::before {
   position: absolute;
   top: -6px;
@@ -34,3 +52,4 @@
     background-image: none;
   }
 }
+*/

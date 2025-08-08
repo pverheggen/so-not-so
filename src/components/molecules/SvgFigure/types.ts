@@ -14,7 +14,6 @@ export interface ISvgFigureOverrides {
 export interface ISvgFigureProps {
   onClick?: () => void;
   figure: SvgFigureData;
-  pass?: boolean;
   selectable?: boolean;
   overrides?: ISvgFigureOverrides;
 }

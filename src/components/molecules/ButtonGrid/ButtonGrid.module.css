@@ -1,7 +1,7 @@
 .grid {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: var(--gap);
+  gap: calc(2 * var(--gap));
 
   .button {
     aspect-ratio: 1;

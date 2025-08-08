@@ -28,10 +28,7 @@ const allSymbols = [
   'm 1 0 a 1 1 0 0 1 0 2 a 1 1 0 0 1 0 -2 m -0.4 1 a 0.4 0.4 0 0 1 0.8 0 a 0.4 0.4 0 0 1 -0.8 0',
 ];
 
-const dotsTest =
-  'm -0.4 0 a 0.4 0.4 0 0 1 0.8 0 a 0.4 0.4 0 0 1 -0.8 0 m 1 1 a 0.4 0.4 0 0 1 0.8 0 a 0.4 0.4 0 0 1 -0.8 0 m 1 0 a 0.4 0.4 0 0 1 0.8 0 a 0.4 0.4 0 0 1 -0.8 0 m -1 1 a 0.4 0.4 0 0 1 0.8 0 a 0.4 0.4 0 0 1 -0.8 0';
-
-const basicSymbols = { square, triangle: dotsTest, circle };
+const basicSymbols = { square, triangle, circle };
 
 const numbers = [
   'm 0 1 l 0 2 a 1 1 0 0 0 2 0 l 0 -2 a 1 1 0 0 0 -2 0 m 2 0 l -2 2',

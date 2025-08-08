@@ -29,16 +29,15 @@
 
 .wrong {
   border-color: #b50000;
+  --bs-color: #b50000;
   animation-name: wrong;
   animation-timing-function: ease;
   animation-duration: var(--dur);
-  &::before {
-    display: none;
-  }
 }
 
 .right {
   border-color: #20f86c;
+  --bs-color: #20f86c;
   animation-name: right;
   animation-timing-function: cubic-bezier(0.22, 0.61, 0.36, 1);
   animation-duration: var(--dur);

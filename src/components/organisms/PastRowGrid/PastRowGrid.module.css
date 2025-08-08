@@ -33,3 +33,11 @@
   grid-template-columns: repeat(3, 1fr);
   gap: var(--gap);
 }
+
+.pass {
+  box-shadow: inset 0 0 0 1px #20f86c;
+}
+
+.wrong {
+  box-shadow: inset 0 0 0 1px #b50000;
+}
