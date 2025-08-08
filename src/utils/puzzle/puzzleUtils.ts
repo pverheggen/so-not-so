@@ -1,6 +1,7 @@
 import { FigureRowData, PuzzleGenerator } from 'types';
 import { randomElement, randomInt, reseed } from 'utils';
 import { allPuzzles } from './allRules';
+import { bob } from './allSymbols';
 
 export const createPuzzle = (): PuzzleGenerator => {
   const puzzle = randomElement(allPuzzles);
@@ -28,7 +29,9 @@ export const createFigureRow = (
   const [figureToSplice] = passes;
   const figures = [...fails];
   figures.splice(passIndex, 0, figureToSplice);
-  //figures.push({ type: 'svg', path: [] });
+  if (key === 0) {
+    figures[2] = { type: 'svg', path: [bob] };
+  }
   return {
     key,
     passIndex,
