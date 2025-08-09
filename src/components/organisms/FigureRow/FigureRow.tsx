@@ -16,7 +16,7 @@ const FigureRow = ({
           case 'svg':
             return (
               <SvgFigure
-                key={figure}
+                key={ifigure}
                 figure={figure}
                 onClick={() => {
                   onClick?.(ifigure);
