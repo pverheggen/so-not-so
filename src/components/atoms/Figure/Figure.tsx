@@ -14,7 +14,7 @@ const Figure = ({ children, onClick, s, selectable }: IFigureProps) => {
       onClick={onClick}
       s={addClassNames([classes.figure, classes.button], s)}
     >
-      {children}
+      <div className={classes.buttonchildren}>{children}</div>
     </Button>
   );
 };

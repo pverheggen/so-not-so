@@ -2,13 +2,14 @@
   position: relative;
   aspect-ratio: 1;
   background-color: var(--bg);
-
-  &.button {
-    padding: 2px;
-  }
+  padding: 0;
 }
 
 .div {
-  padding: 2px;
   border: 2px solid transparent;
+}
+
+.buttonchildren {
+  position: relative;
+  overflow: hidden;
 }

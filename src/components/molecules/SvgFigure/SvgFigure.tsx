@@ -18,7 +18,10 @@ const SvgFigure = ({
       {overrides?.nextFigure && (
         <svg
           viewBox="0 0 12 12"
-          {...createStyle(classes.svgnext, overrides.nextFigure.s)}
+          {...createStyle(
+            [classes.svg, classes.svgnext],
+            overrides.nextFigure.s,
+          )}
         >
           <path
             className={classes.path}

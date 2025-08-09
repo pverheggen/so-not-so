@@ -1,9 +1,9 @@
 .svg {
   display: block;
+  margin: 2px;
 }
 
 .svgnext {
-  display: block;
   position: absolute;
   top: 0;
 }

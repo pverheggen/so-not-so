@@ -1,4 +1,6 @@
 .button {
+  --offset: 6px;
+  --border-color: #eee;
   position: relative;
   font-size: 4rem;
   line-height: 6rem;
@@ -7,49 +9,48 @@
   text-transform: uppercase;
   padding: 0 4rem;
   text-align: center;
-  border: 2px solid #eee;
+  border: 2px solid var(--border-color);
   box-sizing: border-box;
   background-color: var(--bg);
   appearance: unset;
   align-items: unset;
   cursor: pointer;
-  --bs-color: #fff;
-
-  transition: box-shadow 100ms;
-  box-shadow:
-    -2px -2px 0 0 var(--bg),
-    -3px -3px 0 0 var(--bs-color),
-    -5px -5px 0 0 var(--bg),
-    -6px -6px 0 0 var(--bs-color);
-
-  &:hover {
-    box-shadow:
-      -2px -2px 0 0 var(--bg),
-      -3px -3px 0 0 var(--bs-color),
-      -2px -2px 0 0 var(--bg),
-      -3px -3px 0 0 var(--bs-color);
-  }
 
   &:disabled {
     cursor: default;
     border-color: #444;
-    box-shadow: none;
+  }
+
+  &::before {
+    position: absolute;
+    top: calc(-1 * var(--offset));
+    left: calc(-1 * var(--offset));
+    content: '';
+    mask-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-rule='evenodd'%3E%3Cpath d='M3 0h-3L6 6V3zM0 3v3H3z'/%3E%3C/g%3E%3C/svg%3E");
+    background-color: var(--border-color);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    clip-path: polygon(
+      0 0,
+      0 100%,
+      var(--offset) 100%,
+      var(--offset) var(--offset),
+      100% var(--offset),
+      100% 0
+    );
+    transition:
+      top 100ms,
+      left 100ms,
+      clip-path 100ms;
+
+    &:disabled {
+      background-image: none;
+    }
+  }
+
+  transition: transform 100ms;
+  &:active {
+    --offset: 0px;
+    transform: translate(-6px, -6px);
   }
 }
-
-/*
-.button::before {
-  position: absolute;
-  top: -6px;
-  left: -6px;
-  z-index: -1;
-  content: '';
-  background-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-rule='evenodd'%3E%3Cpath d='M3 0h-3L6 6V3zM0 3v3H3z'/%3E%3C/g%3E%3C/svg%3E");
-  width: calc(100% + 4px);
-  height: calc(100% + 4px);
-
-  &:disabled {
-    background-image: none;
-  }
-}
-*/
