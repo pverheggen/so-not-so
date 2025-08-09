@@ -17,6 +17,9 @@
   appearance: unset;
   align-items: unset;
   cursor: pointer;
+  transition:
+    transform 100ms,
+    border-color 100ms;
 
   &:disabled {
     cursor: default;
@@ -43,14 +46,14 @@
     transition:
       top 100ms,
       left 100ms,
-      clip-path 100ms;
+      clip-path 100ms,
+      background-color 100ms;
 
     &:disabled {
       background-image: none;
     }
   }
 
-  transition: transform 100ms;
   &:active {
     --offset: 0px;
     transform: translate(-4px, -4px);
