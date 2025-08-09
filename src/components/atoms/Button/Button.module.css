@@ -17,9 +17,7 @@
   appearance: unset;
   align-items: unset;
   cursor: pointer;
-  transition:
-    transform 100ms,
-    border-color 100ms;
+  transition: border-color 100ms;
 
   &:disabled {
     cursor: default;
@@ -43,11 +41,7 @@
       100% var(--clip-width),
       100% 0
     );
-    transition:
-      top 100ms,
-      left 100ms,
-      clip-path 100ms,
-      background-color 100ms;
+    transition: background-color 100ms;
 
     &:disabled {
       background-image: none;
