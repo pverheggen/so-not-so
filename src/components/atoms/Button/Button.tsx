@@ -8,6 +8,8 @@ const Button = ({ children, onClick, disabled, s }: IFigureProps) => {
       type="button"
       disabled={disabled}
       onClick={onClick}
+      /* iOS, lol */
+      onTouchStart={() => {}}
       {...createStyle([classes.button], s)}
     >
       {children}
