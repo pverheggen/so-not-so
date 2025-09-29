@@ -48,8 +48,11 @@
     }
   }
 
+  &:hover {
+    background-color: #fff1;
+  }
+
   &:active {
-    --offset: 0px;
-    transform: translate(-4px, -4px);
+    transform: scale(.96);
   }
 }
