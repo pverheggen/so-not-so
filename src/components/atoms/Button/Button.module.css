@@ -17,7 +17,7 @@
   appearance: unset;
   align-items: unset;
   cursor: pointer;
-  transition: border-color 100ms;
+  transition: border-color 100ms, transform 50ms;
 
   &:disabled {
     cursor: default;
@@ -26,8 +26,9 @@
 
   &::before {
     position: absolute;
-    top: calc(-1 * var(--offset));
-    left: calc(-1 * var(--offset));
+    top: 0;
+    left: 0;
+    transform: translate(calc(-1 * var(--offset)), calc(-1 * var(--offset)));
     content: '';
     mask-image: url("data:image/svg+xml,%3Csvg width='6' height='6' viewBox='0 0 6 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-rule='evenodd'%3E%3Cpath d='M3 0h-3L6 6V3zM0 3v3H3z'/%3E%3C/g%3E%3C/svg%3E");
     background-color: var(--border-color);
@@ -41,7 +42,7 @@
       100% var(--clip-width),
       100% 0
     );
-    transition: background-color 100ms;
+    transition: background-color 100ms, transform 50ms, clip-path 50ms;
 
     &:disabled {
       background-image: none;
@@ -53,6 +54,18 @@
   }
 
   &:active {
-    transform: scale(.96);
+    transform: translate(-2px, -2px);
+
+    &::before {
+      transform: translate(0px, 0px);
+      clip-path: polygon(
+        0 0,
+        0 100%,
+        0 100%,
+        0 0,
+        100% 0,
+        100% 0
+      );
+    }
   }
 }
